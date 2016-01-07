@@ -1,0 +1,193 @@
+[
+  {
+    "upperLeft": {
+      "x": 188.0,
+      "y": 181.0
+    },
+    "oppositePoint": {
+      "x": 188.0,
+      "y": 181.0
+    },
+    "size": 111.0,
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "shapeType": "SQUARE",
+    "SHAPE_TYPE": "cs355.model.drawing.Square"
+  },
+  {
+    "upperLeft": {
+      "x": 246.0,
+      "y": 119.0
+    },
+    "oppositePoint": {
+      "x": 331.0,
+      "y": 119.0
+    },
+    "size": 85.0,
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "shapeType": "SQUARE",
+    "SHAPE_TYPE": "cs355.model.drawing.Square"
+  },
+  {
+    "start": {
+      "x": 108.0,
+      "y": 118.0
+    },
+    "end": {
+      "x": 191.0,
+      "y": 105.0
+    },
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "shapeType": "LINE",
+    "SHAPE_TYPE": "cs355.model.drawing.Line"
+  },
+  {
+    "center": {
+      "x": 65.0,
+      "y": 213.0
+    },
+    "oppositePoint": {
+      "x": 65.0,
+      "y": 213.0
+    },
+    "width": 342.0,
+    "height": 121.0,
+    "color": {
+      "value": -6711040,
+      "falpha": 0.0
+    },
+    "shapeType": "ELLIPSE",
+    "SHAPE_TYPE": "cs355.model.drawing.Ellipse"
+  },
+  {
+    "center": {
+      "x": 69.0,
+      "y": 131.0
+    },
+    "oppositePoint": {
+      "x": 69.0,
+      "y": 131.0
+    },
+    "radius": 98.0,
+    "color": {
+      "value": -256,
+      "falpha": 0.0
+    },
+    "shapeType": "CIRCLE",
+    "SHAPE_TYPE": "cs355.model.drawing.Circle"
+  },
+  {
+    "a": {
+      "x": 116.0,
+      "y": 404.0
+    },
+    "b": {
+      "x": 232.0,
+      "y": 473.0
+    },
+    "c": {
+      "x": 386.0,
+      "y": 374.0
+    },
+    "color": {
+      "value": -6750055,
+      "falpha": 0.0
+    },
+    "shapeType": "TRIANGLE",
+    "SHAPE_TYPE": "cs355.model.drawing.Triangle"
+  },
+  {
+    "upperLeft": {
+      "x": 167.0,
+      "y": 32.0
+    },
+    "oppositePoint": {
+      "x": 167.0,
+      "y": 32.0
+    },
+    "width": 264.0,
+    "height": 77.0,
+    "color": {
+      "value": -3407770,
+      "falpha": 0.0
+    },
+    "shapeType": "RECTANGLE",
+    "SHAPE_TYPE": "cs355.model.drawing.Rectangle"
+  },
+  {
+    "center": {
+      "x": 150.0,
+      "y": 152.0
+    },
+    "oppositePoint": {
+      "x": 150.0,
+      "y": 152.0
+    },
+    "radius": 156.0,
+    "color": {
+      "value": -16777216,
+      "falpha": 0.0
+    },
+    "shapeType": "CIRCLE",
+    "SHAPE_TYPE": "cs355.model.drawing.Circle"
+  },
+  {
+    "center": {
+      "x": 150.0,
+      "y": 123.0
+    },
+    "oppositePoint": {
+      "x": 150.0,
+      "y": 123.0
+    },
+    "radius": 120.0,
+    "color": {
+      "value": -65485,
+      "falpha": 0.0
+    },
+    "shapeType": "CIRCLE",
+    "SHAPE_TYPE": "cs355.model.drawing.Circle"
+  },
+  {
+    "center": {
+      "x": 295.0,
+      "y": 88.0
+    },
+    "oppositePoint": {
+      "x": 399.0,
+      "y": 88.0
+    },
+    "radius": 104.0,
+    "color": {
+      "value": -65485,
+      "falpha": 0.0
+    },
+    "shapeType": "CIRCLE",
+    "SHAPE_TYPE": "cs355.model.drawing.Circle"
+  },
+  {
+    "center": {
+      "x": 206.0,
+      "y": 54.0
+    },
+    "oppositePoint": {
+      "x": 206.0,
+      "y": 54.0
+    },
+    "radius": 164.0,
+    "color": {
+      "value": -16737895,
+      "falpha": 0.0
+    },
+    "shapeType": "CIRCLE",
+    "SHAPE_TYPE": "cs355.model.drawing.Circle"
+  }
+]
