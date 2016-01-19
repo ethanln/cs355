@@ -93,54 +93,10 @@ public class Rectangle extends Shape {
 	public void setOppositePoint(Point2D.Double oppositePoint) {
 		this.oppositePoint = oppositePoint;
 	}
-	
-	@Override
-	public void editShape(Point2D.Double p){
-		double x = this.oppositePoint.getX();
-		double y = this.oppositePoint.getY();
-		double w = p.getX() - x;
-		double h = p.getY() - y;
-		
-		if(w < 0.0 && h < 0.0){
-			x = Math.min(p.getX(), this.oppositePoint.getX());
-			w = Math.abs(this.oppositePoint.getX() - p.getX());
 
-			y = Math.min(p.getY(), this.oppositePoint.getY());
-			h = Math.abs(this.oppositePoint.getY() - p.getY());
-			
-			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(this.oppositePoint.getX() - w, this.oppositePoint.getY() - h);
-			
-			this.setUpperLeft(newPoint);
-			
-		}
-		else if(w < 0.0 && h >= 0.0){
-			x = Math.min(p.getX(), this.oppositePoint.getX());
-			w = Math.abs(this.oppositePoint.getX() - p.getX());
-			
-			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(this.oppositePoint.getX() - w, this.oppositePoint.getY());
-			this.setUpperLeft(newPoint);
-		}
-		else if(w >= 0.0 && h < 0.0){
-			y = Math.min(p.getY(), this.oppositePoint.getY());
-			h = Math.abs(this.oppositePoint.getY() - p.getY());
-			
-			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(this.oppositePoint.getX(), this.oppositePoint.getY() - h);
-			this.setUpperLeft(newPoint);
-		}
-		else{
-			this.setUpperLeft(this.oppositePoint);
-		}
-		
-		this.setWidth(w);
-		this.setHeight(h);
-	}
-	
 	@Override
-	public boolean isShapeSelected(Point2D.Double p){
-		// TODO
+	public boolean isInShape(Point2D.Double p) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 }

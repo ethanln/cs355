@@ -1,39 +1,24 @@
 package cs355.definitions;
 
 public enum ToolType {
-	SQUARE,
-	CIRCLE,
-	ELLIPSE,
-	LINE,
-	RECTANGLE,
-	TRIANGLE,
+	SHAPE,
 	SELECT,
 	ZOOM_IN,
 	ZOOM_OUT,
-	NONE;
+	DEFAULT;
 	
 	public static int toInt(ToolType type){
 		switch(type){
-			case SQUARE:
-				return 0;
-			case CIRCLE:
+			case SHAPE:
 				return 1;
-			case ELLIPSE:
-				return 2;
-			case LINE:
-				return 3;
-			case RECTANGLE:
-				return 4;
-			case TRIANGLE:
-				return 5;
 			case SELECT:
-				return 6;
+				return 2;
 			case ZOOM_IN:
-				return 7;
+				return 3;
 			case ZOOM_OUT:
-				return 8;
-			case NONE:
-				return 7;
+				return 4;
+			case DEFAULT:
+				return 5;
 			default:
 				return -1;
 		}

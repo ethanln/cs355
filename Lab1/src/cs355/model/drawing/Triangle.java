@@ -79,15 +79,23 @@ public class Triangle extends Shape {
 	public void setC(Point2D.Double c) {
 		this.c = c;
 	}
-	
+
 	@Override
-	public void editShape(Point2D.Double p){
+	public boolean isInShape(Point2D.Double p) {
+		Point2D.Double p2 = new Point2D.Double((b.getX() - a.getX()), (b.getY() - a.getY()));
+		Point2D.Double p3 = new Point2D.Double((c.getX() - a.getX()), (c.getY() - a.getY()));
+		Point2D.Double p0 = new Point2D.Double((p.getX() - a.getX()), (p.getY() - a.getY()));
 		
-	}
-	
-	@Override
-	public boolean isShapeSelected(Point2D.Double p){
-		// TODO
-		return false;
+		double d = (p2.getX() * p3.getY()) - (p3.getX() * p2.getY());
+		
+		double w1 = (p0.getX() * (p2.getY() - p3.getY()) + p0.getY() * (p3.getX() - p2.getX()) + (p2.getX() * p3.getY()) - (p3.getX() * p2.getY())) / d;
+		double w2 = ((p0.getX() * p3.getY()) - (p0.getY() * p3.getX())) / d;
+		double w3 = ((p0.getY() * p2.getX()) - (p0.getX() * p2.getY())) / d;
+		
+		
+		
+		return w1 <= 1 && w1 >= 0
+				&& w2 <= 1 && w2 >= 0
+				&& w3 <= 1 && w3 >= 0;
 	}
 }

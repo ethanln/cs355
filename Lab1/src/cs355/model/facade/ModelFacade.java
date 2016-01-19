@@ -1,6 +1,5 @@
 package cs355.model.facade;
 
-import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.List;
 import java.util.Observer;
@@ -139,16 +138,12 @@ public class ModelFacade{
 		inst()._addObserver(observer);
 	}
 	
-	private void _editShape(Point2D.Double p){
-		if(p != null){
-			Shape shape = this.model.getShape(this.model.getShapes().size() - 1);
-			shape.editShape(p);
-			this.model.notifyObservers();
-		}
+	private void _commitChange(){
+		this.model.notifyObservers();
 	}
 	
-	public static void editShape(Point2D.Double p){
-		inst()._editShape(p);
+	public static void commitChange(){
+		inst()._commitChange();
 	}
 	
 	private boolean _open(File f) {

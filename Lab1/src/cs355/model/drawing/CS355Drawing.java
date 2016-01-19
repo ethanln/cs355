@@ -139,6 +139,7 @@ public abstract class CS355Drawing extends Observable {
 
 		// Set the new shape list.
 		setShapes(shapes);
+
 		return true;
 	}
 

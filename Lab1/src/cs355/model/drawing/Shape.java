@@ -48,11 +48,5 @@ public abstract class Shape {
 		this.shapeType = type;
 	}
 	
-	public void editShape(Point2D.Double p){
-		
-	}
-	
-	public boolean isShapeSelected(Point2D.Double p){
-		return false;
-	}
+	public abstract boolean isInShape(Point2D.Double p);
 }

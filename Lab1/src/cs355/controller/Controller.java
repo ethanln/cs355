@@ -8,14 +8,22 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import cs355.GUIFunctions;
+import cs355.controller.state.*;
 import cs355.definitions.ToolType;
 import cs355.model.drawing.Shape;
-import cs355.model.drawing.factory.ShapeFactory;
 import cs355.model.facade.ModelFacade;
-import cs355.state.InterfaceState;
 
 public class Controller implements CS355Controller{
 
+	private ControllerState state;
+	
+	public Controller(){
+		this.state = new ControllerDefaultState();
+		this.state.setSelectedColor(Color.WHITE);
+		this.state.setSelectedTool(ToolType.DEFAULT);
+		this.state.setSelectedShape(-1);
+	}
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
@@ -23,23 +31,22 @@ public class Controller implements CS355Controller{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if(InterfaceState.isShapeToolSelected()){
-			Shape shape = ShapeFactory.makeShape(InterfaceState.getCurrentToolSelected(), 
-							new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()), 
-							InterfaceState.getCurrentColorSelected());
-			
+		
+		if(this.state.getSelectedTool() == ToolType.SHAPE){
+			Shape shape = this.state.makeShape(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
 			if(shape != null){
-				ModelFacade.addShape(shape);	
+				int index = ModelFacade.addShape(shape);	
+				this.state.setSelectedShape(index);
 			}
 		}
-		else if(InterfaceState.getCurrentToolSelected() == ToolType.SELECT){
+		else if(this.state.getSelectedTool() == ToolType.SELECT){
 			ArrayList<Shape> shapes = (ArrayList<Shape>) ModelFacade.getShapes();
 			for(int i = shapes.size() - 1; i >= 0; i--){
-				if(shapes.get(i).isShapeSelected(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()))){
-					InterfaceState.setCurrentShapeSelected(i);
+				if(shapes.get(i).isInShape(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()))){
+					state.setSelectedShape(i);
 					break;
 				}
-				InterfaceState.setCurrentShapeSelected(-1);
+				state.setSelectedShape(-1);
 			}
 		}
 	}
@@ -64,14 +71,13 @@ public class Controller implements CS355Controller{
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if(InterfaceState.isShapeToolSelected()){
-			ModelFacade.editShape(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
+		if(this.state.getSelectedTool() == ToolType.SHAPE && this.state.getSelectedShape() != -1){
+			this.state.editShape(ModelFacade.getShape(this.state.getSelectedShape()), new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
+			ModelFacade.commitChange();
 		}
-		else if(InterfaceState.getCurrentToolSelected() == ToolType.SELECT){
+		else if(this.state.getSelectedTool() == ToolType.SELECT){
 			// TODO
 		}
-		
-		
 	}
 
 	@Override
@@ -83,66 +89,102 @@ public class Controller implements CS355Controller{
 	@Override
 	public void colorButtonHit(Color c) {
 		GUIFunctions.changeSelectedColor(c);
-		InterfaceState.setCurrentColorSelected(c);	
+		this.state.setSelectedColor(c);
 		GUIFunctions.refresh();
 	}
 
 	@Override
 	public void lineButtonHit() {
-		InterfaceState.setCurrentToolSelected(ToolType.LINE);
+		Color c = this.state.getSelectedColor();
+		this.state = new ControllerLineState();
+		this.state.setSelectedColor(c);
+		this.state.setSelectedShape(-1);
+		this.state.setSelectedTool(ToolType.SHAPE);
 		GUIFunctions.refresh();
 	}
 
 	@Override
 	public void squareButtonHit() {
-		InterfaceState.setCurrentToolSelected(ToolType.SQUARE);
+		Color c = this.state.getSelectedColor();
+		this.state = new ControllerSquareState();
+		this.state.setSelectedColor(c);
+		this.state.setSelectedShape(-1);
+		this.state.setSelectedTool(ToolType.SHAPE);
 		GUIFunctions.refresh();
 		
 	}
 
 	@Override
 	public void rectangleButtonHit() {
-		InterfaceState.setCurrentToolSelected(ToolType.RECTANGLE);
+		Color c = this.state.getSelectedColor();
+		this.state = new ControllerRectangleState();
+		this.state.setSelectedColor(c);
+		this.state.setSelectedShape(-1);
+		this.state.setSelectedTool(ToolType.SHAPE);
 		GUIFunctions.refresh();
 		
 	}
 
 	@Override
 	public void circleButtonHit() {
-		InterfaceState.setCurrentToolSelected(ToolType.CIRCLE);
+		Color c = this.state.getSelectedColor();
+		this.state = new ControllerCircleState();
+		this.state.setSelectedColor(c);
+		this.state.setSelectedShape(-1);
+		this.state.setSelectedTool(ToolType.SHAPE);
 		GUIFunctions.refresh();
 		
 	}
 
 	@Override
 	public void ellipseButtonHit() {
-		InterfaceState.setCurrentToolSelected(ToolType.ELLIPSE);
+		Color c = this.state.getSelectedColor();
+		this.state = new ControllerEllipseState();
+		this.state.setSelectedColor(c);
+		this.state.setSelectedShape(-1);
+		this.state.setSelectedTool(ToolType.SHAPE);
 		GUIFunctions.refresh();
 		
 	}
 
 	@Override
 	public void triangleButtonHit() {
-		InterfaceState.setCurrentToolSelected(ToolType.TRIANGLE);
+		Color c = this.state.getSelectedColor();
+		this.state = new ControllerTriangleState();
+		this.state.setSelectedColor(c);
+		this.state.setSelectedShape(-1);
+		this.state.setSelectedTool(ToolType.SHAPE);
 		GUIFunctions.refresh();
 		
 	}
 
 	@Override
 	public void selectButtonHit() {
-		InterfaceState.setCurrentToolSelected(ToolType.SELECT);
+		Color c = this.state.getSelectedColor();
+		this.state = new ControllerSelectState();
+		this.state.setSelectedColor(c);
+		this.state.setSelectedShape(-1);
+		this.state.setSelectedTool(ToolType.SELECT);
 		GUIFunctions.refresh();
 	}
 
 	@Override
 	public void zoomInButtonHit() {
-		InterfaceState.setCurrentToolSelected(ToolType.ZOOM_IN);
+		Color c = this.state.getSelectedColor();
+		this.state = new ControllerZoomInState();
+		this.state.setSelectedColor(c);
+		this.state.setSelectedShape(-1);
+		this.state.setSelectedTool(ToolType.ZOOM_IN);
 		GUIFunctions.refresh();
 	}
 
 	@Override
 	public void zoomOutButtonHit() {
-		InterfaceState.setCurrentToolSelected(ToolType.ZOOM_OUT);
+		Color c = this.state.getSelectedColor();
+		this.state = new ControllerZoomOutState();
+		this.state.setSelectedColor(c);
+		this.state.setSelectedShape(-1);
+		this.state.setSelectedTool(ToolType.ZOOM_OUT);
 		GUIFunctions.refresh();
 	}
 
@@ -206,9 +248,9 @@ public class Controller implements CS355Controller{
 
 	@Override
 	public void doDeleteShape() {
-		if(InterfaceState.isShapeSelected()){
-			ModelFacade.deleteShape(InterfaceState.getCurrentShapeSelected());
-			InterfaceState.setCurrentShapeSelected(-1);
+		if(this.state.getSelectedShape() > -1){
+			ModelFacade.deleteShape(this.state.getSelectedShape());
+			this.state.setSelectedShape(-1);
 		}
 	}
 
@@ -256,33 +298,33 @@ public class Controller implements CS355Controller{
 
 	@Override
 	public void doMoveForward() {
-		if(InterfaceState.isShapeSelected()){
-			int resultIndex = ModelFacade.moveForward(InterfaceState.getCurrentShapeSelected());
-			InterfaceState.setCurrentShapeSelected(resultIndex);
+		if(this.state.getSelectedShape() > -1){
+			int resultIndex = ModelFacade.moveForward(this.state.getSelectedShape());
+			this.state.setSelectedShape(resultIndex);
 		}
 	}
 
 	@Override
 	public void doMoveBackward() {
-		if(InterfaceState.isShapeSelected()){
-			int resultIndex = ModelFacade.moveBackward(InterfaceState.getCurrentShapeSelected());
-			InterfaceState.setCurrentShapeSelected(resultIndex);
+		if(this.state.getSelectedShape() > -1){
+			int resultIndex = ModelFacade.moveBackward(this.state.getSelectedShape());
+			this.state.setSelectedShape(resultIndex);
 		}	
 	}
 
 	@Override
 	public void doSendToFront() {
-		if(InterfaceState.isShapeSelected()){
-			int resultIndex = ModelFacade.moveToFront(InterfaceState.getCurrentShapeSelected());
-			InterfaceState.setCurrentShapeSelected(resultIndex);
+		if(this.state.getSelectedShape() > -1){
+			int resultIndex = ModelFacade.moveToFront(this.state.getSelectedShape());
+			this.state.setSelectedShape(resultIndex);
 		}
 	}
 
 	@Override
 	public void doSendtoBack() {
-		if(InterfaceState.isShapeSelected()){
-			int resultIndex = ModelFacade.moveToBack(InterfaceState.getCurrentShapeSelected());
-			InterfaceState.setCurrentShapeSelected(resultIndex);
+		if(this.state.getSelectedShape() > -1){
+			int resultIndex = ModelFacade.moveToBack(this.state.getSelectedShape());
+			this.state.setSelectedShape(resultIndex);
 		}
 	}
 	

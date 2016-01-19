@@ -29,7 +29,7 @@ public class FileChooser {
 	 * @return the file that the user wants to open.
 	 */
 	public static File getImageFile(boolean open) {
-		return getFile(imgFilter, open ? OPEN : SAVE);
+		return getFile(imgFilter, open ? OPEN : SAVE, null);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class FileChooser {
 	 * @return the file that the user wants to open.
 	 */
 	public static File getJsonFile(boolean open) {
-		return getFile(jsonFilter, open ? OPEN : SAVE);
+		return getFile(jsonFilter, open ? OPEN : SAVE, "json");
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class FileChooser {
 	 * @return the file that the user wants to open.
 	 */
 	public static File getSceneFile() {
-		return getFile(scnFilter, OPEN);
+		return getFile(scnFilter, OPEN, "scn");
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class FileChooser {
 	 * @param message the message to put on the approve button.
 	 * @return the file that the user selected.
 	 */
-	private static File getFile(FileFilter filter, String message) {
+	private static File getFile(FileFilter filter, String message, String ext) {
 
 		// Set the filter.
 		fc.setFileFilter(filter);
@@ -69,7 +69,21 @@ public class FileChooser {
 			return null;
 		}
 
-		// Return the selected file.
-		return fc.getSelectedFile();
+		// Get the selected file.
+		File f = fc.getSelectedFile();
+
+		// If there is a valid extension...
+		if (ext != null) {
+
+			// Get the file's extension.
+			String fext = FileUtils.getExtension(f);
+
+			// If they don't match, add the extension to the file.
+			if (!fext.equals(ext)) {
+				f = new File(f.getPath() + "." + ext);
+			}
+		}
+
+		return f;
 	}
 }

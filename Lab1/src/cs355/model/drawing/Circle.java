@@ -72,70 +72,20 @@ public class Circle extends Shape {
 	public void setOppositePoint(Point2D.Double oppositePoint) {
 		this.oppositePoint = oppositePoint;
 	}
-	
-	@Override
-	public void editShape(Point2D.Double p){
-		double distX = p.getX() - this.oppositePoint.getX();
-		double distY = p.getY() - this.oppositePoint.getY();
-		double distXY = 0.0;
-			
-		if(distX < 0.0 && distY < 0.0){
-			//top left grid
-			Point2D.Double newPoint = new Point2D.Double();
-			double minDist = Math.abs(distX) < Math.abs(distY) ? Math.abs(distX) : Math.abs(distY);
-			newPoint.setLocation(this.oppositePoint.getX() - minDist, this.oppositePoint.getY() - minDist);
-			this.setCenter(newPoint);
-		}
-		else if(distX < 0.0 && distY >= 0.0){
-			//bottom left grid
-			if(Math.abs(distY) > Math.abs(distX)){
-				Point2D.Double newPoint = new Point2D.Double();
-				newPoint.setLocation(p.getX(), this.oppositePoint.getY());
-				this.setCenter(newPoint);
-			}
-			else{
-				Point2D.Double newPoint = new Point2D.Double();
-				double subVal = Math.abs(distX) - Math.abs(distY);
-				newPoint.setLocation(p.getX() + subVal, this.oppositePoint.getY());
-				this.setCenter(newPoint);
-			}
-		}
-		else if(distX >= 0.0 && distY < 0.0){
-			// top right grid
-			if(Math.abs(distY) < Math.abs(distX)){
-				Point2D.Double newPoint = new Point2D.Double();
-				newPoint.setLocation(this.oppositePoint.getX(), p.getY());
-				this.setCenter(newPoint);
-			}
-			else{
-				Point2D.Double newPoint = new Point2D.Double();
-				double subVal = Math.abs(distY) - Math.abs(distX);
-				newPoint.setLocation(this.oppositePoint.getX(), p.getY() + subVal);
-				this.setCenter(newPoint);
-			}
-		}
-		else{
-			this.setCenter(this.oppositePoint);
-		}
-		
-		distX = Math.abs(p.getX() - this.oppositePoint.getX());
-		distY = Math.abs(p.getY() - this.oppositePoint.getY());
-		
-		distXY = distX < distY ? distX : distY;
-		
-		this.radius = distXY;
-	}
 
 	@Override
-	public boolean isShapeSelected(Point2D.Double p){
-		double distX = Math.abs(Math.abs(p.getX()) - Math.abs(Math.abs(this.center.getX()) + this.radius/2));
-		double distY = Math.abs(Math.abs(p.getY()) - Math.abs(Math.abs(this.center.getY()) + this.radius/2));
+	public boolean isInShape(Point2D.Double p) {
+		double r = this.radius / 2.0;
+		Point2D.Double c = new Point2D.Double(this.center.getX() + r, this.center.getY() + r);
 		
-		distX = Math.pow(distX, 2.0);
-		distY = Math.pow(distY, 2.0);
+		double dX = Math.abs(p.getX() - c.getX());
+		double dY = Math.abs(p.getY() - c.getY());
 		
-		double distance = Math.sqrt(distX + distY);
-		return distance <= this.radius / 2;
+		double distX = Math.pow(dX, 2);
+		double distY = Math.pow(dY, 2);
+		
+		double dist = Math.sqrt(distX + distY);
+		
+		return dist <= r;
 	}
-	
 }

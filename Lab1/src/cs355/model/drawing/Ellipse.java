@@ -93,40 +93,10 @@ public class Ellipse extends Shape {
 	public void setOppositePoint(Point2D.Double oppositePoint) {
 		this.oppositePoint = oppositePoint;
 	}
-	
-	@Override
-	public void editShape(Point2D.Double p){
-		double distX = p.getX() - this.oppositePoint.getX();
-		double distY = p.getY() - this.oppositePoint.getY();
-		
-		if(distX < 0.0 && distY < 0.0){
-			this.setCenter(p);
-		}
-		else if(distX < 0.0 && distY >= 0.0){
-			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(p.getX(), this.oppositePoint.getY());
-			this.setCenter(newPoint);
-		}
-		else if(distX >= 0.0 && distY < 0.0){
-			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(this.oppositePoint.getX(), p.getY());
-			this.setCenter(newPoint);
-		}
-		else{
-			this.setCenter(this.oppositePoint);
-		}
-		
-		distX = Math.abs(p.getX() - this.oppositePoint.getX());
-		distY = Math.abs(p.getY() - this.oppositePoint.getY());
-		
-		this.width = distX;
-		this.height = distY;
-	}
 
 	@Override
-	public boolean isShapeSelected(Point2D.Double p){
-		// TODO
+	public boolean isInShape(Point2D.Double p) {
+		// TODO Auto-generated method stub
 		return false;
 	}
-	
 }

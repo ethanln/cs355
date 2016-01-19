@@ -71,70 +71,10 @@ public class Square extends Shape {
 	public void setOppositePoint(Point2D.Double oppositePoint) {
 		this.oppositePoint = oppositePoint;
 	}
-	
+
 	@Override
-	public void editShape(Point2D.Double p){
-		double x = this.oppositePoint.getX();
-		double y = this.oppositePoint.getY();
-		double w = p.getX() - x;
-		double h = p.getY() - y;
-		
-		double minSize = 0.0;
-		
-		if(w < 0.0 && h < 0.0){
-
-			x = Math.min(p.getX(), this.oppositePoint.getX());
-			w = Math.abs(this.oppositePoint.getX() - p.getX());
-
-			y = Math.min(p.getY(), this.oppositePoint.getY());
-			h = Math.abs(this.oppositePoint.getY() - p.getY());
-			
-			minSize += w < h ? w : h;
-			
-			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(this.oppositePoint.getX() - minSize, this.oppositePoint.getY() - minSize);
-			
-			this.setUpperLeft(newPoint);
-		}
-		else if(w < 0.0 && h >= 0.0){
-			x = Math.min(p.getX(), this.oppositePoint.getX());
-			w = Math.abs(this.oppositePoint.getX() - p.getX());
-
-			y = Math.min(p.getY(), this.oppositePoint.getY());
-			h = Math.abs(this.oppositePoint.getY() - p.getY());
-			
-			minSize += w < h ? w : h;
-			
-			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(this.oppositePoint.getX() - minSize, this.oppositePoint.getY());
-			
-			this.setUpperLeft(newPoint);
-		}
-		else if(w >= 0.0 && h < 0.0){
-			x = Math.min(p.getX(), this.oppositePoint.getX());
-			w = Math.abs(this.oppositePoint.getX() - p.getX());
-
-			y = Math.min(p.getY(), this.oppositePoint.getY());
-			h = Math.abs(this.oppositePoint.getY() - p.getY());
-			
-			minSize += w < h ? w : h;
-			
-			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(this.oppositePoint.getX(), this.oppositePoint.getY() - minSize);
-			
-			this.setUpperLeft(newPoint);
-		}
-		else{
-			this.setUpperLeft(this.oppositePoint);
-			minSize = w < h ? w : h;
-		}
-
-		this.setSize(minSize);
-	}
-	
-	@Override
-	public boolean isShapeSelected(Point2D.Double p){
-		// TODO
+	public boolean isInShape(Point2D.Double p) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 }

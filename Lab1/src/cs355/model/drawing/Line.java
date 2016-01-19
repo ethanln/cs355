@@ -62,15 +62,10 @@ public class Line extends Shape {
 	public void setEnd(Point2D.Double end) {
 		this.end = end;
 	}
-	
+
 	@Override
-	public void editShape(Point2D.Double p){
-		this.setEnd(p);
-	}
-	
-	@Override
-	public boolean isShapeSelected(Point2D.Double p){
-		// TODO
+	public boolean isInShape(Point2D.Double p) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 }
