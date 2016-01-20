@@ -2,16 +2,13 @@ package cs355.model.drawing;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 
 /**
  * Add your circle code here. You can add fields, but you cannot
  * change the ones that already exist. This includes the names!
  */
 public class Circle extends Shape {
-
-	// The center of this shape.
-	private Point2D.Double center;
-	private Point2D.Double oppositePoint;
 
 	// The radius.
 	private double radius;
@@ -22,31 +19,13 @@ public class Circle extends Shape {
 	 * @param center the center of the new shape.
 	 * @param radius the radius of the new shape.
 	 */
-	public Circle(Color color, Point2D.Double center, Point2D.Double oppositePoint, double radius) {
+	public Circle(Color color, Point2D.Double center, double radius) {
 
 		// Initialize the superclass.
-		super(color);
+		super(color, center);
 
 		// Set fields.
-		this.center = center;
-		this.oppositePoint = oppositePoint;
 		this.radius = radius;
-	}
-
-	/**
-	 * Getter for this shape's center.
-	 * @return this shape's center as a Java point.
-	 */
-	public Point2D.Double getCenter() {
-		return center;
-	}
-
-	/**
-	 * Setter for this shape's center.
-	 * @param center the new center as a Java point.
-	 */
-	public void setCenter(Point2D.Double center) {
-		this.center = center;
 	}
 
 	/**
@@ -64,22 +43,23 @@ public class Circle extends Shape {
 	public void setRadius(double radius) {
 		this.radius = radius;
 	}
-	
-	public Point2D.Double getOppositePoint() {
-		return oppositePoint;
-	}
 
-	public void setOppositePoint(Point2D.Double oppositePoint) {
-		this.oppositePoint = oppositePoint;
-	}
-
+	/**
+	 * Add your code to do an intersection test
+	 * here. You shouldn't need the tolerance.
+	 * @param pt = the point to test against.
+	 * @param tolerance = the allowable tolerance.
+	 * @return true if pt is in the shape,
+	 *		   false otherwise.
+	 */
 	@Override
-	public boolean isInShape(Point2D.Double p) {
-		double r = this.radius / 2.0;
-		Point2D.Double c = new Point2D.Double(this.center.getX() + r, this.center.getY() + r);
+	public boolean pointInShape(Double pt, double tolerance) {
+		Point2D.Double objCoor = this.convertWorldToObj(pt);
 		
-		double dX = Math.abs(p.getX() - c.getX());
-		double dY = Math.abs(p.getY() - c.getY());
+		double r = this.radius;
+		
+		double dX = Math.abs(objCoor.getX());
+		double dY = Math.abs(objCoor.getY());
 		
 		double distX = Math.pow(dX, 2);
 		double distY = Math.pow(dY, 2);

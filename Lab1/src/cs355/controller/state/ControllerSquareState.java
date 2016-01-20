@@ -9,73 +9,57 @@ import cs355.model.drawing.Square;
 
 public class ControllerSquareState extends ControllerState{
 
+	private Point2D.Double origin;
+	
 	@Override
 	public void editShape(Shape shape, Double p) {
 		
 		Square square = (Square)shape;
 		
-		double x = square.getOppositePoint().getX();
-		double y = square.getOppositePoint().getY();
-		double w = p.getX() - x;
-		double h = p.getY() - y;
+		double x = p.getX() - origin.getX();
+		double y = p.getY() - origin.getY();
 		
 		double minSize = 0.0;
 		
-		if(w < 0.0 && h < 0.0){
-
-			x = Math.min(p.getX(), square.getOppositePoint().getX());
-			w = Math.abs(square.getOppositePoint().getX() - p.getX());
-
-			y = Math.min(p.getY(), square.getOppositePoint().getY());
-			h = Math.abs(square.getOppositePoint().getY() - p.getY());
+		Point2D.Double newPoint = new Point2D.Double();
+		if(x < 0.0 && y < 0.0){
+			x = Math.abs(x);
+			y = Math.abs(y);
+			minSize += x < y ? x : y;
 			
-			minSize += w < h ? w : h;
-			
-			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(square.getOppositePoint().getX() - minSize, square.getOppositePoint().getY() - minSize);
-			
-			square.setUpperLeft(newPoint);
+			newPoint.setLocation(this.origin.getX() - (minSize / 2), this.origin.getY() - (minSize / 2));
 		}
-		else if(w < 0.0 && h >= 0.0){
-			x = Math.min(p.getX(), square.getOppositePoint().getX());
-			w = Math.abs(square.getOppositePoint().getX() - p.getX());
+		else if(x < 0.0 && y >= 0.0){
+			x = Math.abs(x);
+			y = Math.abs(y);
+			minSize += x < y ? x : y;
 
-			y = Math.min(p.getY(), square.getOppositePoint().getY());
-			h = Math.abs(square.getOppositePoint().getY() - p.getY());
-			
-			minSize += w < h ? w : h;
-			
-			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(square.getOppositePoint().getX() - minSize, square.getOppositePoint().getY());
-			
-			square.setUpperLeft(newPoint);
+			newPoint.setLocation(this.origin.getX() - (minSize / 2), this.origin.getY() + (minSize / 2));
 		}
-		else if(w >= 0.0 && h < 0.0){
-			x = Math.min(p.getX(), square.getOppositePoint().getX());
-			w = Math.abs(square.getOppositePoint().getX() - p.getX());
+		else if(x >= 0.0 && y < 0.0){
+			x = Math.abs(x);
+			y = Math.abs(y);
+			minSize += x < y ? x : y;
 
-			y = Math.min(p.getY(), square.getOppositePoint().getY());
-			h = Math.abs(square.getOppositePoint().getY() - p.getY());
-			
-			minSize += w < h ? w : h;
-			
-			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(square.getOppositePoint().getX(), square.getOppositePoint().getY() - minSize);
-			
-			square.setUpperLeft(newPoint);
+			newPoint.setLocation(this.origin.getX() + (minSize / 2), this.origin.getY() - (minSize / 2));
 		}
 		else{
-			square.setUpperLeft(square.getOppositePoint());
-			minSize = w < h ? w : h;
+			x = Math.abs(x);
+			y = Math.abs(y);
+			minSize += x < y ? x : y;
+
+			newPoint.setLocation(this.origin.getX() + (minSize / 2), this.origin.getY() + (minSize / 2));
 		}
 
+		square.setCenter(newPoint);
 		square.setSize(minSize);
 	}
 
 	@Override
 	public Shape makeShape(Double p) {
-		Square square = new Square(super.selectedColor, p, p, 0);
+		Square square = new Square(super.selectedColor, p, 0);
 		square.setShapeType(ShapeType.SQUARE);
+		this.origin = p;
 		return square;
 	}
 

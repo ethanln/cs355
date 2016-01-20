@@ -2,15 +2,13 @@ package cs355.model.drawing;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 
 /**
  * Add your line code here. You can add fields, but you cannot
  * change the ones that already exist. This includes the names!
  */
 public class Line extends Shape {
-
-	// The starting point of the line.
-	private Point2D.Double start;
 
 	// The ending point of the line.
 	private Point2D.Double end;
@@ -24,27 +22,10 @@ public class Line extends Shape {
 	public Line(Color color, Point2D.Double start, Point2D.Double end) {
 
 		// Initialize the superclass.
-		super(color);
+		super(color, start);
 
 		// Set fields.
-		this.start = start;
 		this.end = end;
-	}
-
-	/**
-	 * Getter for this Line's starting point.
-	 * @return the starting point as a Java point.
-	 */
-	public Point2D.Double getStart() {
-		return start;
-	}
-
-	/**
-	 * Setter for this Line's starting point.
-	 * @param start the new starting point for the Line.
-	 */
-	public void setStart(Point2D.Double start) {
-		this.start = start;
 	}
 
 	/**
@@ -63,9 +44,30 @@ public class Line extends Shape {
 		this.end = end;
 	}
 
+	/**
+	 * Add your code to do an intersection test
+	 * here. You <i>will</i> need the tolerance.
+	 * @param pt = the point to test against.
+	 * @param tolerance = the allowable tolerance.
+	 * @return true if pt is in the shape,
+	 *		   false otherwise.
+	 */
 	@Override
-	public boolean isInShape(Point2D.Double p) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean pointInShape(Double pt, double tolerance) {
+
+		double vectorAX = this.center.getX() - this.end.getX();
+		double vectorAY = this.center.getY() - this.end.getY();
+		
+		double vectorBX = this.center.getX() - pt.getX();
+		double vectorBY = this.center.getY() - pt.getY();
+		
+		double magnitudeA = Math.sqrt(Math.pow(vectorAX, 2) + Math.pow(vectorAY, 2));
+		double magnitudeB = Math.sqrt(Math.pow(vectorBX, 2) + Math.pow(vectorBY, 2));
+		double magnitudeC = ((vectorAX * vectorBX) + (vectorAY * vectorBY)) / magnitudeA;
+		
+		double distance = Math.sqrt(Math.pow(magnitudeB, 2) - Math.pow(magnitudeC, 2));
+		
+		//I need to check if corresponding point is on the line from where the line was selected
+		return distance <= tolerance;
 	}
 }

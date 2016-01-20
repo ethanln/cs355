@@ -10,7 +10,7 @@ public class DrawableRectangle extends DrawableShape{
 	public DrawableRectangle(Shape shape){
 		
 		Rectangle rect = (Rectangle)shape;
-		super.shape = new Rectangle2D.Double(rect.getUpperLeft().getX(), rect.getUpperLeft().getY(), rect.getWidth(), rect.getHeight());
+		super.shape = new Rectangle2D.Double(rect.getCenter().getX() - (rect.getWidth() / 2), rect.getCenter().getY() - (rect.getHeight() / 2), rect.getWidth(), rect.getHeight());
 		super.color = rect.getColor();
 	}
 }

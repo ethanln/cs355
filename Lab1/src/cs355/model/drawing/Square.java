@@ -2,6 +2,7 @@ package cs355.model.drawing;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 
 /**
  * Add your square code here. You can add fields, but you cannot
@@ -9,9 +10,6 @@ import java.awt.geom.Point2D;
  */
 public class Square extends Shape {
 
-	// The upper left corner of this shape.
-	private Point2D.Double upperLeft;
-	private Point2D.Double oppositePoint;
 	// The size of this Square.
 	private double size;
 
@@ -21,31 +19,12 @@ public class Square extends Shape {
 	 * @param upperLeft the upper left corner of the new shape.
 	 * @param size the size of the new shape.
 	 */
-	public Square(Color color, Point2D.Double upperLeft, Point2D.Double oppositePoint, double size) {
+	public Square(Color color, Point2D.Double center, double size) {
 
 		// Initialize the superclass.
-		super(color);
+		super(color, center);
 
-		// Set fields.
-		this.upperLeft = upperLeft;
-		this.oppositePoint = oppositePoint;
 		this.size = size;
-	}
-
-	/**
-	 * Getter for this Rectangle's upper left corner.
-	 * @return the upper left corner as a Java point.
-	 */
-	public Point2D.Double getUpperLeft() {
-		return upperLeft;
-	}
-
-	/**
-	 * Setter for this Rectangle's upper left corner.
-	 * @param upperLeft the new upper left corner.
-	 */
-	public void setUpperLeft(Point2D.Double upperLeft) {
-		this.upperLeft = upperLeft;
 	}
 
 	/**
@@ -64,17 +43,25 @@ public class Square extends Shape {
 		this.size = size;
 	}
 
-	public Point2D.Double getOppositePoint() {
-		return oppositePoint;
-	}
-
-	public void setOppositePoint(Point2D.Double oppositePoint) {
-		this.oppositePoint = oppositePoint;
-	}
-
+	/**
+	 * Add your code to do an intersection test
+	 * here. You shouldn't need the tolerance.
+	 * @param pt = the point to test against.
+	 * @param tolerance = the allowable tolerance.
+	 * @return true if pt is in the shape,
+	 *		   false otherwise.
+	 */
 	@Override
-	public boolean isInShape(Point2D.Double p) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean pointInShape(Double pt, double tolerance) {
+		
+		Point2D.Double objCoor = this.convertWorldToObj(pt);
+		
+		Point2D.Double upperRight = new Point2D.Double((this.size / 2), -(this.size / 2));
+		Point2D.Double bottomLeft = new Point2D.Double(-(this.size / 2), (this.size / 2));
+		
+		boolean isBetweenXCoor = objCoor.getX() <= upperRight.getX() && objCoor.getX() >= bottomLeft.getX();
+		boolean isBetweenYCoor = objCoor.getY() <= bottomLeft.getY() && objCoor.getY() >= upperRight.getY();
+		
+		return isBetweenXCoor && isBetweenYCoor;
 	}
 }

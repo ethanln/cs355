@@ -9,31 +9,54 @@ import cs355.model.drawing.Shape;
 
 public class ControllerEllipseState extends ControllerState{
 
+	private Point2D.Double origin;
+	
 	@Override
 	public void editShape(Shape shape, Double p) {
 		Ellipse ellipse = (Ellipse)shape;
-		double distX = p.getX() - ellipse.getOppositePoint().getX();
-		double distY = p.getY() - ellipse.getOppositePoint().getY();
+		double distX = p.getX() - this.origin.getX();
+		double distY = p.getY() - this.origin.getY();
 		
 		if(distX < 0.0 && distY < 0.0){
-			ellipse.setCenter(p);
+			// top left grid
+			distX = Math.abs(p.getX() - this.origin.getX());
+			distY = Math.abs(p.getY() - this.origin.getY());
+			
+			Point2D.Double newPoint = new Point2D.Double();
+			newPoint.setLocation(new Point2D.Double(p.getX() + (distX / 2), p.getY() + (distY / 2)));
+			
+			ellipse.setCenter(newPoint);
 		}
 		else if(distX < 0.0 && distY >= 0.0){
+			// bottom left grid
+			distX = Math.abs(p.getX() - this.origin.getX());
+			distY = Math.abs(p.getY() - this.origin.getY());
+			
 			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(p.getX(), ellipse.getOppositePoint().getY());
+			newPoint.setLocation(p.getX() + (distX / 2), p.getY() - (distY / 2));
+			
 			ellipse.setCenter(newPoint);
 		}
 		else if(distX >= 0.0 && distY < 0.0){
+			// top right grid
+			distX = Math.abs(p.getX() - this.origin.getX());
+			distY = Math.abs(p.getY() - this.origin.getY());
+			
 			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(ellipse.getOppositePoint().getX(), p.getY());
+			newPoint.setLocation(p.getX() - (distX / 2), p.getY() + (distY / 2));
+			
 			ellipse.setCenter(newPoint);
 		}
 		else{
-			ellipse.setCenter(ellipse.getOppositePoint());
+			distX = Math.abs(p.getX() - this.origin.getX());
+			distY = Math.abs(p.getY() - this.origin.getY());
+			
+			Point2D.Double newPoint = new Point2D.Double();
+			newPoint.setLocation(p.getX() - (distX / 2), p.getY() - (distY / 2));
+			
+			ellipse.setCenter(newPoint);
 		}
-		
-		distX = Math.abs(p.getX() - ellipse.getOppositePoint().getX());
-		distY = Math.abs(p.getY() - ellipse.getOppositePoint().getY());
+
 		
 		ellipse.setWidth(distX);
 		ellipse.setHeight(distY);
@@ -41,8 +64,9 @@ public class ControllerEllipseState extends ControllerState{
 
 	@Override
 	public Shape makeShape(Double p) {
-		Ellipse ellipse = new Ellipse(this.selectedColor, p, p, 0.0, 0.0);
+		Ellipse ellipse = new Ellipse(this.selectedColor, p, 0.0, 0.0);
 		ellipse.setShapeType(ShapeType.ELLIPSE);
+		this.origin = p;
 		return ellipse;
 	}
 

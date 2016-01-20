@@ -2,6 +2,7 @@ package cs355.model.drawing;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 
 /**
  * Add your triangle code here. You can add fields, but you cannot
@@ -21,10 +22,10 @@ public class Triangle extends Shape {
 	 * @param b the second point.
 	 * @param c the third point.
 	 */
-	public Triangle(Color color, Point2D.Double a, Point2D.Double b, Point2D.Double c) {
+	public Triangle(Color color, Point2D.Double center, Point2D.Double a, Point2D.Double b, Point2D.Double c) {
 
 		// Initialize the superclass.
-		super(color);
+		super(color, center);
 
 		// Set fields.
 		this.a = a;
@@ -80,19 +81,32 @@ public class Triangle extends Shape {
 		this.c = c;
 	}
 
+	/**
+	 * Add your code to do an intersection test
+	 * here. You shouldn't need the tolerance.
+	 * @param pt = the point to test against.
+	 * @param tolerance = the allowable tolerance.
+	 * @return true if pt is in the shape,
+	 *		   false otherwise.
+	 */
 	@Override
-	public boolean isInShape(Point2D.Double p) {
-		Point2D.Double p2 = new Point2D.Double((b.getX() - a.getX()), (b.getY() - a.getY()));
-		Point2D.Double p3 = new Point2D.Double((c.getX() - a.getX()), (c.getY() - a.getY()));
-		Point2D.Double p0 = new Point2D.Double((p.getX() - a.getX()), (p.getY() - a.getY()));
+	public boolean pointInShape(Double pt, double tolerance) {
+		
+		Point2D.Double objCoor = this.convertWorldToObj(pt);
+		
+		Point2D.Double aObj = this.convertWorldToObj(this.a);
+		Point2D.Double bObj = this.convertWorldToObj(this.b);
+		Point2D.Double cObj = this.convertWorldToObj(this.c);
+		
+		Point2D.Double p2 = new Point2D.Double((bObj.getX() - aObj.getX()), (bObj.getY() - aObj.getY()));
+		Point2D.Double p3 = new Point2D.Double((cObj.getX() - aObj.getX()), (cObj.getY() - aObj.getY()));
+		Point2D.Double p0 = new Point2D.Double((objCoor.getX() - aObj.getX()), (objCoor.getY() - aObj.getY()));
 		
 		double d = (p2.getX() * p3.getY()) - (p3.getX() * p2.getY());
 		
 		double w1 = (p0.getX() * (p2.getY() - p3.getY()) + p0.getY() * (p3.getX() - p2.getX()) + (p2.getX() * p3.getY()) - (p3.getX() * p2.getY())) / d;
 		double w2 = ((p0.getX() * p3.getY()) - (p0.getY() * p3.getX())) / d;
 		double w3 = ((p0.getY() * p2.getX()) - (p0.getX() * p2.getY())) / d;
-		
-		
 		
 		return w1 <= 1 && w1 >= 0
 				&& w2 <= 1 && w2 >= 0

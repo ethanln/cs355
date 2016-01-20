@@ -2,16 +2,13 @@ package cs355.model.drawing;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 
 /**
  * Add your ellipse code here. You can add fields, but you cannot
  * change the ones that already exist. This includes the names!
  */
 public class Ellipse extends Shape {
-
-	// The center of this shape.
-	private Point2D.Double center;
-	private Point2D.Double oppositePoint;
 
 	// The width of this shape.
 	private double width;
@@ -26,32 +23,14 @@ public class Ellipse extends Shape {
 	 * @param width the width of the new shape.
 	 * @param height the height of the new shape.
 	 */
-	public Ellipse(Color color, Point2D.Double center, Point2D.Double oppositePoint, double width, double height) {
+	public Ellipse(Color color, Point2D.Double center, double width, double height) {
 
 		// Initialize the superclass.
-		super(color);
+		super(color, center);
 
 		// Set fields.
-		this.center = center;
-		this.oppositePoint = oppositePoint;
 		this.width = width;
 		this.height = height;
-	}
-
-	/**
-	 * Getter for this shape's center.
-	 * @return this shape's center as a Java point.
-	 */
-	public Point2D.Double getCenter() {
-		return center;
-	}
-
-	/**
-	 * Setter for this shape's center.
-	 * @param center the new center as a Java point.
-	 */
-	public void setCenter(Point2D.Double center) {
-		this.center = center;
 	}
 
 	/**
@@ -85,18 +64,27 @@ public class Ellipse extends Shape {
 	public void setHeight(double height) {
 		this.height = height;
 	}
-	
-	public Point2D.Double getOppositePoint() {
-		return oppositePoint;
-	}
 
-	public void setOppositePoint(Point2D.Double oppositePoint) {
-		this.oppositePoint = oppositePoint;
-	}
-
+	/**
+	 * Add your code to do an intersection test
+	 * here. You shouldn't need the tolerance.
+	 * @param pt = the point to test against.
+	 * @param tolerance = the allowable tolerance.
+	 * @return true if pt is in the shape,
+	 *		   false otherwise.
+	 */
 	@Override
-	public boolean isInShape(Point2D.Double p) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean pointInShape(Double pt, double tolerance) {
+		Point2D.Double objCoor = this.convertWorldToObj(pt);
+		
+		double widthR = this.width / 2;
+		double heightR = this.height / 2;
+		
+		double dX = Math.abs(objCoor.getX());
+		double dY = Math.abs(objCoor.getY());
+		
+		double result = (Math.pow(dX, 2) / Math.pow(widthR, 2)) + (Math.pow(dY, 2) / Math.pow(heightR, 2));
+		
+		return result <= 1.0;
 	}
 }

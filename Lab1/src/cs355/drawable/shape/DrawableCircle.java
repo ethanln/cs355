@@ -10,7 +10,7 @@ public class DrawableCircle extends DrawableShape{
 	public DrawableCircle(Shape shape){
 		
 		Circle circle = (Circle)shape;
-		super.shape = new Ellipse2D.Double(circle.getCenter().getX(), circle.getCenter().getY(), circle.getRadius(), circle.getRadius());
+		super.shape = new Ellipse2D.Double(circle.getCenter().getX() - circle.getRadius(), circle.getCenter().getY() - circle.getRadius(), circle.getRadius() * 2, circle.getRadius() * 2);
 		super.color = circle.getColor();
 	}
 }

@@ -42,7 +42,7 @@ public class Controller implements CS355Controller{
 		else if(this.state.getSelectedTool() == ToolType.SELECT){
 			ArrayList<Shape> shapes = (ArrayList<Shape>) ModelFacade.getShapes();
 			for(int i = shapes.size() - 1; i >= 0; i--){
-				if(shapes.get(i).isInShape(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()))){
+				if(shapes.get(i).pointInShape(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()), 4.0)){
 					state.setSelectedShape(i);
 					break;
 				}

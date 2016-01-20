@@ -9,55 +9,64 @@ import cs355.model.drawing.Shape;
 
 public class ControllerRectangleState extends ControllerState{
 
+	private Point2D.Double origin;
+	
 	@Override
 	public void editShape(Shape shape, Double p) {
 		Rectangle rect = (Rectangle)shape;
-		double x = rect.getOppositePoint().getX();
-		double y = rect.getOppositePoint().getY();
-		double w = p.getX() - x;
-		double h = p.getY() - y;
+		double distX = p.getX() - this.origin.getX();
+		double distY = p.getY() - this.origin.getY();
 		
-		if(w < 0.0 && h < 0.0){
-			x = Math.min(p.getX(), rect.getOppositePoint().getX());
-			w = Math.abs(rect.getOppositePoint().getX() - p.getX());
-
-			y = Math.min(p.getY(), rect.getOppositePoint().getY());
-			h = Math.abs(rect.getOppositePoint().getY() - p.getY());
+		if(distX < 0.0 && distY < 0.0){
+			// top left grid
+			distX = Math.abs(p.getX() - this.origin.getX());
+			distY = Math.abs(p.getY() - this.origin.getY());
 			
 			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(rect.getOppositePoint().getX() - w, rect.getOppositePoint().getY() - h);
+			newPoint.setLocation(new Point2D.Double(p.getX() + (distX / 2), p.getY() + (distY / 2)));
 			
-			rect.setUpperLeft(newPoint);
-			
+			rect.setCenter(newPoint);
 		}
-		else if(w < 0.0 && h >= 0.0){
-			x = Math.min(p.getX(), rect.getOppositePoint().getX());
-			w = Math.abs(rect.getOppositePoint().getX() - p.getX());
+		else if(distX < 0.0 && distY >= 0.0){
+			// bottom left grid
+			distX = Math.abs(p.getX() - this.origin.getX());
+			distY = Math.abs(p.getY() - this.origin.getY());
 			
 			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(rect.getOppositePoint().getX() - w, rect.getOppositePoint().getY());
-			rect.setUpperLeft(newPoint);
+			newPoint.setLocation(p.getX() + (distX / 2), p.getY() - (distY / 2));
+			
+			rect.setCenter(newPoint);
 		}
-		else if(w >= 0.0 && h < 0.0){
-			y = Math.min(p.getY(), rect.getOppositePoint().getY());
-			h = Math.abs(rect.getOppositePoint().getY() - p.getY());
+		else if(distX >= 0.0 && distY < 0.0){
+			// top right grid
+			distX = Math.abs(p.getX() - this.origin.getX());
+			distY = Math.abs(p.getY() - this.origin.getY());
 			
 			Point2D.Double newPoint = new Point2D.Double();
-			newPoint.setLocation(rect.getOppositePoint().getX(), rect.getOppositePoint().getY() - h);
-			rect.setUpperLeft(newPoint);
+			newPoint.setLocation(p.getX() - (distX / 2), p.getY() + (distY / 2));
+			
+			rect.setCenter(newPoint);
 		}
 		else{
-			rect.setUpperLeft(rect.getOppositePoint());
+			distX = Math.abs(p.getX() - this.origin.getX());
+			distY = Math.abs(p.getY() - this.origin.getY());
+			
+			Point2D.Double newPoint = new Point2D.Double();
+			newPoint.setLocation(p.getX() - (distX / 2), p.getY() - (distY / 2));
+			
+			rect.setCenter(newPoint);
 		}
+
 		
-		rect.setWidth(w);
-		rect.setHeight(h);
+		rect.setWidth(distX);
+		rect.setHeight(distY);
 	}
 
 	@Override
 	public Shape makeShape(Double p) {
-		Rectangle rect = new Rectangle(super.selectedColor, p, p, 0.0, 0.0);
+		Rectangle rect = new Rectangle(super.selectedColor, p, 0.0, 0.0);
 		rect.setShapeType(ShapeType.RECTANGLE);
+		this.origin = p;
 		return rect;
 	}
 
