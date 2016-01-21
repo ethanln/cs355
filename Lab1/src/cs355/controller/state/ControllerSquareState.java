@@ -9,8 +9,6 @@ import cs355.model.drawing.Square;
 
 public class ControllerSquareState extends ControllerState{
 
-	private Point2D.Double origin;
-	
 	@Override
 	public void editShape(Shape shape, Double p) {
 		
@@ -59,14 +57,25 @@ public class ControllerSquareState extends ControllerState{
 	public Shape makeShape(Double p) {
 		Square square = new Square(super.selectedColor, p, 0);
 		square.setShapeType(ShapeType.SQUARE);
-		this.origin = p;
 		return square;
 	}
 
 	@Override
-	public void moveShape(Shape shape, Double p) {
+	public void moveShape(Shape shape, Shape overlayBorder, Shape overlayHandle, Double p) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Shape makeShapeBorder(Shape shape) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Shape makeHandle(Shape shape) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

@@ -4,6 +4,10 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
+import cs355.dto.ConvertWorldToObjDto;
+import cs355.util.UtilFactory;
+import cs355.util.WorldToObjectConverterUtil;
+
 /**
  * Add your triangle code here. You can add fields, but you cannot
  * change the ones that already exist. This includes the names!
@@ -91,16 +95,19 @@ public class Triangle extends Shape {
 	 */
 	@Override
 	public boolean pointInShape(Double pt, double tolerance) {
+		// get world to object coordinates converter from util factory
+		WorldToObjectConverterUtil converter = (WorldToObjectConverterUtil)UtilFactory.makeUtil("world_to_object_converter");
 		
-		Point2D.Double objCoor = this.convertWorldToObj(pt);
+		//instantiate dto to be passed into the converter
+		ConvertWorldToObjDto dto = new ConvertWorldToObjDto(pt, super.center, super.rotation);
 		
-		Point2D.Double aObj = this.convertWorldToObj(this.a);
-		Point2D.Double bObj = this.convertWorldToObj(this.b);
-		Point2D.Double cObj = this.convertWorldToObj(this.c);
+		// convert the point of interst to object coordinates
+		Point2D.Double objCoor = (Point2D.Double)converter.doUtil(dto);
 		
-		Point2D.Double p2 = new Point2D.Double((bObj.getX() - aObj.getX()), (bObj.getY() - aObj.getY()));
-		Point2D.Double p3 = new Point2D.Double((cObj.getX() - aObj.getX()), (cObj.getY() - aObj.getY()));
-		Point2D.Double p0 = new Point2D.Double((objCoor.getX() - aObj.getX()), (objCoor.getY() - aObj.getY()));
+		// calulate weights
+		Point2D.Double p2 = new Point2D.Double((this.b.getX() - this.a.getX()), (this.b.getY() - this.a.getY()));
+		Point2D.Double p3 = new Point2D.Double((this.c.getX() - this.a.getX()), (this.c.getY() - this.a.getY()));
+		Point2D.Double p0 = new Point2D.Double((objCoor.getX() - this.a.getX()), (objCoor.getY() - this.a.getY()));
 		
 		double d = (p2.getX() * p3.getY()) - (p3.getX() * p2.getY());
 		
@@ -108,6 +115,7 @@ public class Triangle extends Shape {
 		double w2 = ((p0.getX() * p3.getY()) - (p0.getY() * p3.getX())) / d;
 		double w3 = ((p0.getY() * p2.getX()) - (p0.getX() * p2.getY())) / d;
 		
+		// if all the weights are between 1 and 0, then return true
 		return w1 <= 1 && w1 >= 0
 				&& w2 <= 1 && w2 >= 0
 				&& w3 <= 1 && w3 >= 0;

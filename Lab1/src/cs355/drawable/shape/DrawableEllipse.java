@@ -10,7 +10,11 @@ public class DrawableEllipse extends DrawableShape{
 	public DrawableEllipse(Shape shape){
 		
 		Ellipse ellipse = (Ellipse)shape;
-		super.shape = new Ellipse2D.Double(ellipse.getCenter().getX() - (ellipse.getWidth() / 2), ellipse.getCenter().getY() - (ellipse.getHeight() / 2), ellipse.getWidth(), ellipse.getHeight());
+		if(ellipse.isHandle() || ellipse.isSelectedBorder()){
+			super.isSelectedOverlay = true;
+		}
+		super.ConvertObjToWorld(ellipse.getCenter(), ellipse.getRotation());
+		super.shape = new Ellipse2D.Double(-(ellipse.getWidth() / 2), -(ellipse.getHeight() / 2), ellipse.getWidth(), ellipse.getHeight());
 		super.color = ellipse.getColor();
 	}
 }

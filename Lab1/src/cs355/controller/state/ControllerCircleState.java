@@ -8,8 +8,6 @@ import cs355.model.drawing.Circle;
 import cs355.model.drawing.Shape;
 
 public class ControllerCircleState extends ControllerState{
-
-	private Point2D.Double origin;
 	
 	@Override
 	public void editShape(Shape shape, Double p) {
@@ -77,14 +75,25 @@ public class ControllerCircleState extends ControllerState{
 	public Shape makeShape(Double p) {
 		Circle circle = new Circle(super.selectedColor, p, 0.0);
 		circle.setShapeType(ShapeType.CIRCLE);
-		this.origin = p;
 		return circle;
 	}
 
 	@Override
-	public void moveShape(Shape shape, Double p) {
+	public void moveShape(Shape shape, Shape overlayBorder, Shape overlayHandle, Double p) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Shape makeShapeBorder(Shape shape) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Shape makeHandle(Shape shape) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

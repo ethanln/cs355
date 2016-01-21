@@ -19,9 +19,21 @@ public class ControllerZoomOutState extends ControllerState{
 	}
 
 	@Override
-	public void moveShape(Shape shape, Double p) {
+	public void moveShape(Shape shape, Shape overlayBorder, Shape overlayHandle, Double p) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Shape makeShapeBorder(Shape shape) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Shape makeHandle(Shape shape) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

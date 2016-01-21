@@ -1,7 +1,6 @@
 package cs355.model.drawing;
 
 import java.awt.Color;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 import cs355.definitions.ShapeType;
@@ -21,7 +20,10 @@ public abstract class Shape {
 	// The rotation of this shape.
 	protected double rotation;
 	
+	// additional fields
 	protected ShapeType shapeType;
+	protected boolean isHandle;
+	protected boolean isSelectedBorder;
 
 	/**
 	 * Basic constructor that sets the field.
@@ -31,6 +33,9 @@ public abstract class Shape {
 		this.color = color;
 		this.center = center;
 		this.rotation = 0.0;
+		
+		this.isHandle = false;
+		this.isSelectedBorder = false;
 	}
 
 	/**
@@ -49,14 +54,6 @@ public abstract class Shape {
 		this.color = color;
 	}
 	
-	
-	public ShapeType getShapeType(){
-		return this.shapeType;
-	}
-	
-	public void setShapeType(ShapeType type){
-		this.shapeType = type;
-	}
 	/**
 	 * Getter for this shape's center.
 	 * @return this shape's center as a Java point.
@@ -88,6 +85,31 @@ public abstract class Shape {
 	public void setRotation(double rotation) {
 		this.rotation = rotation;
 	}
+	
+	
+	public ShapeType getShapeType(){
+		return this.shapeType;
+	}
+	
+	public void setShapeType(ShapeType type){
+		this.shapeType = type;
+	}
+	
+	public boolean isHandle(){
+		return this.isHandle;
+	}
+	
+	public void setIsHandle(boolean value){
+		this.isHandle = value;
+	}
+	
+	public boolean isSelectedBorder(){
+		return this.isSelectedBorder;
+	}
+	
+	public void setIsSelectedBorder(boolean value){
+		this.isSelectedBorder = value;
+	}
 
 	/**
 	 * Used to test for whether the user clicked inside a shape or not.
@@ -96,20 +118,5 @@ public abstract class Shape {
 	 * @return true if pt is in the shape, false otherwise.
 	 */
 	public abstract boolean pointInShape(Point2D.Double pt, double tolerance);
-	
-	protected Point2D.Double convertWorldToObj(Point2D.Double pt){
-		
-		Point2D.Double objCoor = new Point2D.Double();
-		AffineTransform worldToObj = new AffineTransform();
-		
-		if(this.rotation != 0.0){
-			worldToObj.rotate(-Math.PI / this.rotation);
-		}
-		
-		worldToObj.translate(-this.center.getX(), -this.center.getY());
-		worldToObj.transform(pt, objCoor);
-		
-		return objCoor;
-	}
 
 }

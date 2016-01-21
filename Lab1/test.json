@@ -1,0 +1,18 @@
+[
+  {
+    "size": 212.0,
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 209.0,
+      "y": 215.0
+    },
+    "rotation": 0.0,
+    "shapeType": "SQUARE",
+    "isHandle": false,
+    "isSelectedBorder": false,
+    "SHAPE_TYPE": "cs355.model.drawing.Square"
+  }
+]

@@ -4,6 +4,10 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
+import cs355.dto.ConvertWorldToObjDto;
+import cs355.util.UtilFactory;
+import cs355.util.WorldToObjectConverterUtil;
+
 /**
  * Add your rectangle code here. You can add fields, but you cannot
  * change the ones that already exist. This includes the names!
@@ -75,13 +79,23 @@ public class Rectangle extends Shape {
 	 */
 	@Override
 	public boolean pointInShape(Double pt, double tolerance) {
-		Point2D.Double objCoor = this.convertWorldToObj(pt);
+		// get world to object coordinates converter from util factory
+		WorldToObjectConverterUtil converter = (WorldToObjectConverterUtil)UtilFactory.makeUtil("world_to_object_converter");
 		
+		// instantiate dto to be passed into the converter
+		ConvertWorldToObjDto dto = new ConvertWorldToObjDto(pt, super.center, super.rotation);
+		
+		// convert the point of interst to object coordinates
+		Point2D.Double objCoor = (Point2D.Double)converter.doUtil(dto);
+		
+		// calculate bottom left corner and top right corner
 		Point2D.Double upperRight = new Point2D.Double((this.width / 2), -(this.height / 2));
 		Point2D.Double bottomLeft = new Point2D.Double(-(this.width / 2), (this.height / 2));
 		
 		boolean isBetweenXCoor = objCoor.getX() <= upperRight.getX() && objCoor.getX() >= bottomLeft.getX();
 		boolean isBetweenYCoor = objCoor.getY() <= bottomLeft.getY() && objCoor.getY() >= upperRight.getY();
+		
+		// if point of interest is between bottom left corner and top right corner, then return true
 		return isBetweenXCoor && isBetweenYCoor;
 	}
 }

@@ -4,6 +4,10 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
+import cs355.dto.ConvertWorldToObjDto;
+import cs355.util.UtilFactory;
+import cs355.util.WorldToObjectConverterUtil;
+
 /**
  * Add your ellipse code here. You can add fields, but you cannot
  * change the ones that already exist. This includes the names!
@@ -75,8 +79,16 @@ public class Ellipse extends Shape {
 	 */
 	@Override
 	public boolean pointInShape(Double pt, double tolerance) {
-		Point2D.Double objCoor = this.convertWorldToObj(pt);
+		// get world to object coordinates converter from util factory
+		WorldToObjectConverterUtil converter = (WorldToObjectConverterUtil)UtilFactory.makeUtil("world_to_object_converter");
 		
+		// instantiate dto to be passed into the converter
+		ConvertWorldToObjDto dto = new ConvertWorldToObjDto(pt, super.center, super.rotation);
+		
+		// convert the point of interst to object coordinates
+		Point2D.Double objCoor = (Point2D.Double)converter.doUtil(dto);
+		
+		// calculate bounds
 		double widthR = this.width / 2;
 		double heightR = this.height / 2;
 		
@@ -85,6 +97,7 @@ public class Ellipse extends Shape {
 		
 		double result = (Math.pow(dX, 2) / Math.pow(widthR, 2)) + (Math.pow(dY, 2) / Math.pow(heightR, 2));
 		
+		// if result is less than or equal to 1, return true;
 		return result <= 1.0;
 	}
 }
