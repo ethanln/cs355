@@ -19,11 +19,7 @@ public abstract class ControllerState {
 	
 	public abstract Shape makeShape(Point2D.Double p);
 	
-	public abstract void moveShape(Shape shape, Shape overlayBorder, Shape overlayHandle, Point2D.Double p);
-	
-	public abstract Shape makeShapeBorder(Shape shape);
-	
-	public abstract Shape makeHandle(Shape shape);
+	public abstract void moveShape(Shape shape, Point2D.Double p);
 
 	public Color getSelectedColor() {
 		return this.selectedColor;

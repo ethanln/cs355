@@ -60,11 +60,6 @@ public class ModelFacade{
 	private int _moveToFront(int index) {
 		this.model.moveToFront(index);
 		this.model.notifyObservers();
-		
-		if(this.model.getShape(this.model.getShapes().size() - 2).isSelectedBorder() 
-				&& this.model.getShape(this.model.getShapes().size() - 1).isHandle()){
-			return this.model.getShapes().size() - 3;
-		}
 		return this.model.getShapes().size() - 1;
 	}
 	
@@ -87,11 +82,7 @@ public class ModelFacade{
 	private int _moveForward(int index) {
 		this.model.moveForward(index);
 		this.model.notifyObservers();
-		if(this.model.getShapes().size() > 2
-				&& this.model.getShape(this.model.getShapes().size() - 2).isSelectedBorder()
-				&& this.model.getShape(this.model.getShapes().size() - 1).isHandle()){
-			return index < (this.model.getShapes().size() - 3) ? (index + 1) : index;
-		}
+		
 		return index < (this.model.getShapes().size() - 1) ? (index + 1) : index;
 	}
 	

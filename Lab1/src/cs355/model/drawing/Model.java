@@ -32,19 +32,10 @@ public class Model extends CS355Drawing{
 
 	@Override
 	public void moveToFront(int index) {
-		if(this.shapes.size() > 1 && 
-				this.shapes.get(this.shapes.size() - 2).isSelectedBorder
-				&& this.shapes.get(this.shapes.size() - 1).isHandle){
-			Shape shape = this.shapes.get(index);
-			this.shapes.remove(index);
-			this.shapes.add(this.shapes.size() - 2, shape);
-		}
-		else{
-			Shape shape = this.shapes.get(index);
-			this.shapes.add(shape);
-			this.shapes.remove(index);
-			setChanged();
-		}
+		Shape shape = this.shapes.get(index);
+		this.shapes.add(shape);
+		this.shapes.remove(index);
+		setChanged();
 	}
 
 	@Override
@@ -57,9 +48,7 @@ public class Model extends CS355Drawing{
 
 	@Override
 	public void moveForward(int index) {
-		if(index < this.shapes.size() - 1
-				&& !this.shapes.get(index + 2).isHandle()
-				&& !this.shapes.get(index + 1).isSelectedBorder()){
+		if(index < this.shapes.size() - 1){
 			Shape currentShape = this.shapes.get(index);
 			Shape nextShape = this.shapes.get(index + 1);
 			this.shapes.set(index + 1, currentShape);

@@ -11,8 +11,11 @@ import cs355.GUIFunctions;
 import cs355.controller.state.*;
 import cs355.definitions.ShapeType;
 import cs355.definitions.ToolType;
+import cs355.dto.ConvertWorldToObjDto;
 import cs355.model.drawing.Shape;
 import cs355.model.facade.ModelFacade;
+import cs355.util.UtilFactory;
+import cs355.util.WorldToObjectConverterUtil;
 
 public class Controller implements CS355Controller{
 
@@ -47,59 +50,38 @@ public class Controller implements CS355Controller{
 		else if(this.state.getSelectedTool() == ToolType.SELECT){
 			// get all shapes in the model
 			ArrayList<Shape> shapes = (ArrayList<Shape>) ModelFacade.getShapes();
+			
 			for(int i = shapes.size() - 1; i >= 0; i--){
-				// check if the selection point is within the shape and the shape is not a Select shape border
-				if(shapes.get(i).pointInShape(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()), 4.0) 
-						&& !shapes.get(i).isSelectedBorder()){
-					// set origin of the click.
-					this.state.setOrigin(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
-					
-					if(!shapes.get(i).isHandle()){
-						
-						this.clearOverlays();
-						
-						// store the shape as selected in the state
-						this.state.setSelectedShape(i);
-						
-						// set the color of new selected shape
-						Color selectedShapeColor = ModelFacade.getShape(i).getColor();
-						this.state.setSelectedColor(selectedShapeColor);
-						GUIFunctions.changeSelectedColor(selectedShapeColor);
-						GUIFunctions.refresh();
-
-						// add new border selection overlay to the model
-						Shape shapeBorder = this.state.makeShapeBorder(shapes.get(i));
-						Shape handle = this.state.makeHandle(shapes.get(i));
-						
-						// if either the border or handle are null, do not include any overlay
-						if(shapeBorder != null && handle != null){
-							ModelFacade.addShape(this.state.makeShapeBorder(shapes.get(i)));
-							ModelFacade.addShape(this.state.makeHandle(shapes.get(i)));
-						}
-					}
-					else{
-						// if the shape type is a handle bar, set the state to rotation
-						this.state.setIsRotation(true);
-					}
-					break;
+				// check if shape is selected and the click falls on the handle
+				if(shapes.get(i).isSelected() && shapes.get(i).isInHandle(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()))){
+					this.state.setIsRotation(true);
+					return;
 				}
-				state.setSelectedShape(-1);
 			}
 			
-			// if no shapes are selected, clear all the overlays
-			if(state.getSelectedShape() == -1){
-				this.clearOverlays();
-			}
-		}
-	}
-	
-	private void clearOverlays(){
-		if(ModelFacade.getShapes().size() > 1){
-			if(ModelFacade.getShapes().get(ModelFacade.getShapes().size() - 2).isSelectedBorder()){
-				ModelFacade.deleteShape(ModelFacade.getShapes().size() - 2);
-			}
-			if (ModelFacade.getShapes().get(ModelFacade.getShapes().size() - 1).isHandle()){
-				ModelFacade.deleteShape(ModelFacade.getShapes().size() - 1);
+			for(int i = shapes.size() - 1; i >= 0; i--){
+				if(shapes.get(i).pointInShape(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()), 4.0)){ // check if the selection point is within the shape and the shape is not a Select shape border
+					
+					// reset selected shapes
+					this.resetSelection();
+					
+					// set origin of the click.
+					this.state.setOrigin(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
+
+					// store the shape as selected in the state
+					this.state.setSelectedShape(i);
+					ModelFacade.getShape(i).setIsSelected(true);
+					ModelFacade.commitChange();
+					
+					// set the color of new selected shape
+					Color selectedShapeColor = ModelFacade.getShape(i).getColor();
+					this.state.setSelectedColor(selectedShapeColor);
+					GUIFunctions.changeSelectedColor(selectedShapeColor);
+					GUIFunctions.refresh();
+
+					break;
+				}
+				this.resetSelection();
 			}
 		}
 	}
@@ -108,7 +90,7 @@ public class Controller implements CS355Controller{
 	public void mouseReleased(MouseEvent e) {
 		// if the selection tool is not being used, be sure to deselect any shape
 		if(this.state.getSelectedTool() != ToolType.SELECT){
-			this.state.setSelectedShape(-1);
+			this.resetSelection();
 		}
 		if(this.state.isRotation()){
 			this.state.setIsRotation(false);
@@ -138,23 +120,32 @@ public class Controller implements CS355Controller{
 			Shape shape = ModelFacade.getShape(this.state.getSelectedShape());
 			if(!this.state.isRotation()){
 				if(shape.getShapeType() != ShapeType.LINE){
-					this.state.moveShape(shape, 
-								ModelFacade.getShape(ModelFacade.getShapes().size() - 2), 
-								ModelFacade.getShape(ModelFacade.getShapes().size() - 1), 
-								new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
+					this.state.moveShape(shape, new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
 				}
 				else{
-					this.state.moveShape(shape, 
-								null, null, 
-								new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
+					this.state.moveShape(shape, new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
 				}
-				ModelFacade.commitChange();
 			}
 			else{
-				Shape overlayBorder = ModelFacade.getShape(ModelFacade.getShapes().size() - 2);
-				Shape overlayHandle = ModelFacade.getShape(ModelFacade.getShapes().size() - 1);
+				WorldToObjectConverterUtil converter = (WorldToObjectConverterUtil)UtilFactory.makeUtil("world_to_object_converter");
+				// instantiate dto to be passed into the converter
+				ConvertWorldToObjDto dto = new ConvertWorldToObjDto(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()), 
+																	shape.getCenter(), shape.getRotation());
+				// convert the point of interst to object coordinates
+				Point2D.Double objCoor = (Point2D.Double)converter.doUtil(dto);
+				
+				double newRotation = shape.getRotation() + Math.atan(-(objCoor.getX() / objCoor.getY()));;
+				if(objCoor.getY() < 0){
+					newRotation = shape.getRotation() + Math.atan((objCoor.getX() / -objCoor.getY()));
+				}
+				else if(objCoor.getX() < 0){
+					newRotation = shape.getRotation() + Math.atan((-objCoor.getX() / objCoor.getY()));
+				}
+
+				shape.setRotation(newRotation);
 				// IMPLEMENT ROTATION
 			}
+			ModelFacade.commitChange();
 		}
 	}
 
@@ -164,6 +155,14 @@ public class Controller implements CS355Controller{
 		
 	}
 
+	private void resetSelection(){
+		if(this.state.getSelectedShape() > -1){
+			ModelFacade.getShape(this.state.getSelectedShape()).setIsSelected(false);
+			ModelFacade.commitChange();
+			this.state.setSelectedShape(-1);
+		}
+	}
+	
 	@Override
 	public void colorButtonHit(Color c) {
 		GUIFunctions.changeSelectedColor(c);
@@ -180,22 +179,30 @@ public class Controller implements CS355Controller{
 	@Override
 	public void lineButtonHit() {
 		Color c = this.state.getSelectedColor();
+		int selectedShapeIndex = this.state.getSelectedShape();
+		
 		this.state = new ControllerLineState();
+		this.state.setSelectedShape(selectedShapeIndex);
 		this.state.setSelectedColor(c);
-		this.state.setSelectedShape(-1);
 		this.state.setSelectedTool(ToolType.SHAPE);
-		this.clearOverlays();
+		
+		this.resetSelection();
+		
 		GUIFunctions.refresh();
 	}
 
 	@Override
 	public void squareButtonHit() {
 		Color c = this.state.getSelectedColor();
+		int selectedShapeIndex = this.state.getSelectedShape();
+		
 		this.state = new ControllerSquareState();
+		this.state.setSelectedShape(selectedShapeIndex);
 		this.state.setSelectedColor(c);
-		this.state.setSelectedShape(-1);
 		this.state.setSelectedTool(ToolType.SHAPE);
-		this.clearOverlays();
+		
+		this.resetSelection();
+		
 		GUIFunctions.refresh();
 		
 	}
@@ -203,11 +210,15 @@ public class Controller implements CS355Controller{
 	@Override
 	public void rectangleButtonHit() {
 		Color c = this.state.getSelectedColor();
+		int selectedShapeIndex = this.state.getSelectedShape();
+		
 		this.state = new ControllerRectangleState();
+		this.state.setSelectedShape(selectedShapeIndex);
 		this.state.setSelectedColor(c);
-		this.state.setSelectedShape(-1);
 		this.state.setSelectedTool(ToolType.SHAPE);
-		this.clearOverlays();
+		
+		this.resetSelection();
+		
 		GUIFunctions.refresh();
 		
 	}
@@ -215,11 +226,15 @@ public class Controller implements CS355Controller{
 	@Override
 	public void circleButtonHit() {
 		Color c = this.state.getSelectedColor();
+		int selectedShapeIndex = this.state.getSelectedShape();
+		
 		this.state = new ControllerCircleState();
+		this.state.setSelectedShape(selectedShapeIndex);
 		this.state.setSelectedColor(c);
-		this.state.setSelectedShape(-1);
 		this.state.setSelectedTool(ToolType.SHAPE);
-		this.clearOverlays();
+		
+		this.resetSelection();
+		
 		GUIFunctions.refresh();
 		
 	}
@@ -227,11 +242,15 @@ public class Controller implements CS355Controller{
 	@Override
 	public void ellipseButtonHit() {
 		Color c = this.state.getSelectedColor();
+		int selectedShapeIndex = this.state.getSelectedShape();
+		
 		this.state = new ControllerEllipseState();
+		this.state.setSelectedShape(selectedShapeIndex);
 		this.state.setSelectedColor(c);
-		this.state.setSelectedShape(-1);
 		this.state.setSelectedTool(ToolType.SHAPE);
-		this.clearOverlays();
+		
+		this.resetSelection();
+		
 		GUIFunctions.refresh();
 		
 	}
@@ -239,45 +258,60 @@ public class Controller implements CS355Controller{
 	@Override
 	public void triangleButtonHit() {
 		Color c = this.state.getSelectedColor();
-		this.state = new ControllerTriangleState();
-		this.state.setSelectedColor(c);
-		this.state.setSelectedShape(-1);
-		this.state.setSelectedTool(ToolType.SHAPE);
-		this.clearOverlays();
-		GUIFunctions.refresh();
+		int selectedShapeIndex = this.state.getSelectedShape();
 		
+		this.state = new ControllerTriangleState();
+		this.state.setSelectedShape(selectedShapeIndex);
+		this.state.setSelectedColor(c);
+		this.state.setSelectedTool(ToolType.SHAPE);
+		
+		this.resetSelection();
+		
+		GUIFunctions.refresh();
 	}
 
 	@Override
 	public void selectButtonHit() {
 		Color c = this.state.getSelectedColor();
+		int selectedShapeIndex = this.state.getSelectedShape();
+		
 		this.state = new ControllerSelectState();
+		this.state.setSelectedShape(selectedShapeIndex);
 		this.state.setSelectedColor(c);
-		this.state.setSelectedShape(-1);
 		this.state.setSelectedTool(ToolType.SELECT);
-		this.clearOverlays();
+		
+		this.resetSelection();
+		
 		GUIFunctions.refresh();
 	}
 
 	@Override
 	public void zoomInButtonHit() {
 		Color c = this.state.getSelectedColor();
+		int selectedShapeIndex = this.state.getSelectedShape();
+		
 		this.state = new ControllerZoomInState();
+		this.state.setSelectedShape(selectedShapeIndex);
 		this.state.setSelectedColor(c);
-		this.state.setSelectedShape(-1);
 		this.state.setSelectedTool(ToolType.ZOOM_IN);
-		this.clearOverlays();
+		
+		this.resetSelection();
+		
 		GUIFunctions.refresh();
 	}
 
 	@Override
 	public void zoomOutButtonHit() {
 		Color c = this.state.getSelectedColor();
+		int selectedShapeIndex = this.state.getSelectedShape();
+		
 		this.state = new ControllerZoomOutState();
+		this.state.setSelectedShape(selectedShapeIndex);
 		this.state.setSelectedColor(c);
-		this.state.setSelectedShape(-1);
 		this.state.setSelectedTool(ToolType.ZOOM_OUT);
-		this.clearOverlays();
+		
+		this.resetSelection();
+		
 		GUIFunctions.refresh();
 	}
 
@@ -331,7 +365,7 @@ public class Controller implements CS355Controller{
 
 	@Override
 	public void saveDrawing(File file) {
-		this.clearOverlays();
+		this.resetSelection();
 		ModelFacade.save(file);
 	}
 
@@ -344,9 +378,8 @@ public class Controller implements CS355Controller{
 	public void doDeleteShape() {
 		if(this.state.getSelectedShape() > -1){
 			ModelFacade.deleteShape(this.state.getSelectedShape());
-			this.state.setSelectedShape(-1);
-			this.clearOverlays();
 		}
+		this.resetSelection();
 	}
 
 	@Override

@@ -70,4 +70,16 @@ public class Line extends Shape {
 		//I need to check if corresponding point is on the line from where the line was selected
 		return distance <= tolerance;
 	}
+
+	@Override
+	public Double getHandleCenter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isInHandle(Double pt) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

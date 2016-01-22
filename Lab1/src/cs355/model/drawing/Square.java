@@ -77,4 +77,9 @@ public class Square extends Shape {
 		// if point of interest is between bottom left corner and top right corner, then return true
 		return isBetweenXCoor && isBetweenYCoor;
 	}
+
+	@Override
+	public Double getHandleCenter() {
+		return new Point2D.Double(super.center.getX(), super.center.getY() - (this.size / 2) - 20);
+	}
 }

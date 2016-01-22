@@ -1,16 +1,9 @@
 package cs355.controller.state;
 
-import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
-import cs355.definitions.ShapeType;
-import cs355.model.drawing.Circle;
-import cs355.model.drawing.Ellipse;
-import cs355.model.drawing.Rectangle;
 import cs355.model.drawing.Shape;
-import cs355.model.drawing.Square;
-import cs355.model.drawing.Triangle;
 
 public class ControllerSelectState extends ControllerState{
 	
@@ -26,7 +19,7 @@ public class ControllerSelectState extends ControllerState{
 	}
 
 	@Override
-	public void moveShape(Shape shape, Shape overlayBorder, Shape overlayHandle, Double p) {
+	public void moveShape(Shape shape, Double p) {
 		//shape.
 		double vectorX = this.origin.getX() - p.getX();
 		double vectorY = this.origin.getY() - p.getY();
@@ -34,23 +27,13 @@ public class ControllerSelectState extends ControllerState{
 		Point2D.Double newCenter = new Point2D.Double();
 		newCenter.setLocation(shape.getCenter().getX() - vectorX, shape.getCenter().getY() - vectorY);
 		
-		
-		if(overlayBorder != null && overlayHandle != null){
-			Point2D.Double newCenterHandle = new Point2D.Double();
-			newCenterHandle.setLocation(overlayHandle.getCenter().getX() - vectorX, overlayHandle.getCenter().getY() - vectorY);
-			
-			// set the border overlay center
-			overlayBorder.setCenter(newCenter);
-			overlayHandle.setCenter(newCenterHandle);
-		}
-		
 		// set the shape center
 		shape.setCenter(newCenter);
 
 		// set the new origin
 		this.origin = p;
 	}
-
+/*
 	@Override
 	public Shape makeShapeBorder(Shape shape) {
 		
@@ -166,5 +149,5 @@ public class ControllerSelectState extends ControllerState{
 				return null;
 		}
 	}
-
+*/
 }

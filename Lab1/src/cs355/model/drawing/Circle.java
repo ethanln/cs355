@@ -81,4 +81,9 @@ public class Circle extends Shape {
 		// return true if the distance is less than the radius
 		return dist <= r;
 	}
+
+	@Override
+	public Double getHandleCenter() {
+		return new Point2D.Double(super.center.getX(), super.center.getY() - (this.radius) - 20);
+	}
 }

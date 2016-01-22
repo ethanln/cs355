@@ -120,4 +120,15 @@ public class Triangle extends Shape {
 				&& w2 <= 1 && w2 >= 0
 				&& w3 <= 1 && w3 >= 0;
 	}
+
+	@Override
+	public Double getHandleCenter() {
+		double lowestYPoint = Math.min(this.a.getY(), this.b.getY());
+		lowestYPoint = Math.min(lowestYPoint, this.c.getY());
+		
+		if(lowestYPoint < 0.0){
+			return new Point2D.Double(super.center.getX(), super.center.getY() + (lowestYPoint - 20));
+		}
+		return new Point2D.Double(super.center.getX(), super.center.getY() - lowestYPoint - 20);
+	}
 }

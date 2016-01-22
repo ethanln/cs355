@@ -100,4 +100,9 @@ public class Ellipse extends Shape {
 		// if result is less than or equal to 1, return true;
 		return result <= 1.0;
 	}
+
+	@Override
+	public Double getHandleCenter() {
+		return new Point2D.Double(super.center.getX(), super.center.getY() - (this.height / 2) - 20);
+	}
 }
