@@ -20,7 +20,10 @@ public class CS355 {
 	public static void main(String[] args) {
 
 		// Fill in the parameters below with your controller and view.
-		GUIFunctions.createCS355Frame(new Controller(), new View());
+		Controller controller = new Controller();
+		View view = new View(controller);
+		
+		GUIFunctions.createCS355Frame(controller, view);
 		GUIFunctions.changeSelectedColor(Color.WHITE);
 		GUIFunctions.refresh();
 	}

@@ -12,6 +12,7 @@ public class Line extends Shape {
 
 	// The ending point of the line.
 	private Point2D.Double end;
+	private int rotatePoint;
 
 	/**
 	 * Basic constructor that sets all fields.
@@ -26,6 +27,7 @@ public class Line extends Shape {
 
 		// Set fields.
 		this.end = end;
+		this.rotatePoint = -1;
 	}
 
 	/**
@@ -71,15 +73,45 @@ public class Line extends Shape {
 		return distance <= tolerance;
 	}
 
-	@Override
+	public int getRotatePoint(){
+		return this.rotatePoint;
+	}
+	public void setRotatePoint(int rotatePoint){
+		this.rotatePoint = rotatePoint;
+	}
+	
+	/*@Override
 	public Double getHandleCenter() {
-		// TODO Auto-generated method stub
-		return null;
+		if(this.rotatePoint == 0){
+			return super.center;
+		}
+		else if(this.rotatePoint == 1){
+			return this.end;
+		}
+		else{
+			return null;
+		}
 	}
 
 	@Override
 	public boolean isInHandle(Double pt) {
-		// TODO Auto-generated method stub
+		Circle startHandle = new Circle(Color.RED, super.center, 10.0 / 2.0);
+		boolean isInStartHandle = startHandle.pointInShape(pt, 0.0);
+		
+		Circle endHandle = new Circle(Color.RED, this.end, 10.0 / 2.0);
+		boolean isEndHandle = endHandle.pointInShape(pt, 0.0);
+		
+		if(isInStartHandle){
+			this.rotatePoint = 0;
+			return true;
+		}
+		
+		if(isEndHandle){
+			this.rotatePoint = 1;
+			return true;
+		}
+		
+		this.rotatePoint = -1;
 		return false;
-	}
+	}*/
 }

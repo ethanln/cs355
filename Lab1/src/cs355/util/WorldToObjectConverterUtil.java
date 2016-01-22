@@ -15,7 +15,7 @@ public class WorldToObjectConverterUtil implements IUtil{
 			AffineTransform worldToObj = new AffineTransform();
 			
 			if(dto.rotation != 0.0){
-				worldToObj.rotate(-Math.PI / dto.rotation);
+				worldToObj.rotate(-dto.rotation);
 			}
 			
 			worldToObj.translate(-dto.center.getX(), -dto.center.getY());

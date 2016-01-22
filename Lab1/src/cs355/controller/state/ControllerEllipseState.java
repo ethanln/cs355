@@ -73,4 +73,10 @@ public class ControllerEllipseState extends ControllerState{
 		
 	}
 
+	@Override
+	public void rotateShape(Shape shape, Double p) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -78,8 +78,17 @@ public class Square extends Shape {
 		return isBetweenXCoor && isBetweenYCoor;
 	}
 
-	@Override
+	/*@Override
 	public Double getHandleCenter() {
-		return new Point2D.Double(super.center.getX(), super.center.getY() - (this.size / 2) - 20);
-	}
+		// get world to object coordinates converter from util factory
+		WorldToObjectConverterUtil converter = (WorldToObjectConverterUtil)UtilFactory.makeUtil("world_to_object_converter");
+		
+		// instantiate dto to be passed into the converter
+		ConvertWorldToObjDto dto = new ConvertWorldToObjDto(new Point2D.Double(super.center.getX(), super.center.getY() - (this.size / 2) - 20), super.center, super.rotation);
+		
+		// convert the point of interst to object coordinates
+		Point2D.Double objCoor = (Point2D.Double)converter.doUtil(dto);
+		
+		return new Point2D.Double(super.center.getX() - objCoor.getX(), super.center.getY() + objCoor.getY());
+	}*/
 }

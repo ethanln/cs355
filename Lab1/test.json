@@ -1,18 +1,61 @@
 [
   {
-    "size": 212.0,
+    "a": {
+      "x": -122.0,
+      "y": -17.666666666666686
+    },
+    "b": {
+      "x": -96.0,
+      "y": 112.33333333333331
+    },
+    "c": {
+      "x": 218.0,
+      "y": -94.66666666666669
+    },
+    "color": {
+      "value": -6711040,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 235.0,
+      "y": 284.6666666666667
+    },
+    "rotation": 0.12308595969500552,
+    "shapeType": "TRIANGLE",
+    "isSelected": false,
+    "SHAPE_TYPE": "cs355.model.drawing.Triangle"
+  },
+  {
+    "end": {
+      "x": 272.0,
+      "y": 528.0
+    },
+    "color": {
+      "value": -10066432,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 179.0,
+      "y": 106.0
+    },
+    "rotation": 0.0,
+    "shapeType": "LINE",
+    "isSelected": false,
+    "SHAPE_TYPE": "cs355.model.drawing.Line"
+  },
+  {
+    "radius": 126.0,
     "color": {
       "value": -1,
       "falpha": 0.0
     },
     "center": {
-      "x": 209.0,
-      "y": 215.0
+      "x": 182.0,
+      "y": 269.0
     },
-    "rotation": 0.0,
-    "shapeType": "SQUARE",
-    "isHandle": false,
-    "isSelectedBorder": false,
-    "SHAPE_TYPE": "cs355.model.drawing.Square"
+    "rotation": -14.076634921371962,
+    "shapeType": "CIRCLE",
+    "isSelected": false,
+    "SHAPE_TYPE": "cs355.model.drawing.Circle"
   }
 ]

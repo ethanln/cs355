@@ -67,4 +67,10 @@ public class ControllerTriangleState extends ControllerState{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void rotateShape(Shape shape, Double p) {
+		// TODO Auto-generated method stub
+		
+	}
 }

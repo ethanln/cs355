@@ -9,13 +9,11 @@ import java.util.Iterator;
 
 import cs355.GUIFunctions;
 import cs355.controller.state.*;
-import cs355.definitions.ShapeType;
 import cs355.definitions.ToolType;
-import cs355.dto.ConvertWorldToObjDto;
+import cs355.dto.*;
 import cs355.model.drawing.Shape;
 import cs355.model.facade.ModelFacade;
 import cs355.util.UtilFactory;
-import cs355.util.WorldToObjectConverterUtil;
 
 public class Controller implements CS355Controller{
 
@@ -45,21 +43,30 @@ public class Controller implements CS355Controller{
 				
 				// store the shape index as the currently selected shape in the state
 				this.state.setSelectedShape(index);
+				this.state.setIsDrawing(true);
 			}
 		}
 		else if(this.state.getSelectedTool() == ToolType.SELECT){
 			// get all shapes in the model
 			ArrayList<Shape> shapes = (ArrayList<Shape>) ModelFacade.getShapes();
 			
+			// check for shapes that are already selected, and if the click falls within the handle of the selected shape
 			for(int i = shapes.size() - 1; i >= 0; i--){
 				// check if shape is selected and the click falls on the handle
-				if(shapes.get(i).isSelected() && shapes.get(i).isInHandle(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()))){
-					this.state.setIsRotation(true);
-					return;
+				if(this.state.getSelectedShape() > -1){
+					PointInHandleDto dto = new PointInHandleDto(ModelFacade.getShape(this.state.getSelectedShape()), 
+										   new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
+				
+					if((boolean)UtilFactory.makeUtil("point_in_handle").doUtil(dto)){
+						this.state.setIsRotation(true);
+						return;
+					}
 				}
 			}
 			
+			// check of the click is within any of the shapes from front to back
 			for(int i = shapes.size() - 1; i >= 0; i--){
+				// if click falls within a shape
 				if(shapes.get(i).pointInShape(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()), 4.0)){ // check if the selection point is within the shape and the shape is not a Select shape border
 					
 					// reset selected shapes
@@ -70,8 +77,6 @@ public class Controller implements CS355Controller{
 
 					// store the shape as selected in the state
 					this.state.setSelectedShape(i);
-					ModelFacade.getShape(i).setIsSelected(true);
-					ModelFacade.commitChange();
 					
 					// set the color of new selected shape
 					Color selectedShapeColor = ModelFacade.getShape(i).getColor();
@@ -92,6 +97,7 @@ public class Controller implements CS355Controller{
 		if(this.state.getSelectedTool() != ToolType.SELECT){
 			this.resetSelection();
 		}
+		// cease rotation 
 		if(this.state.isRotation()){
 			this.state.setIsRotation(false);
 		}
@@ -113,37 +119,19 @@ public class Controller implements CS355Controller{
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		if(this.state.getSelectedTool() == ToolType.SHAPE && this.state.getSelectedShape() != -1){
+			// draw and edit shape from initial click
 			this.state.editShape(ModelFacade.getShape(this.state.getSelectedShape()), new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
 			ModelFacade.commitChange();
 		}
 		else if(this.state.getSelectedTool() == ToolType.SELECT && this.state.getSelectedShape() > -1){
 			Shape shape = ModelFacade.getShape(this.state.getSelectedShape());
-			if(!this.state.isRotation()){
-				if(shape.getShapeType() != ShapeType.LINE){
-					this.state.moveShape(shape, new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
-				}
-				else{
-					this.state.moveShape(shape, new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
-				}
+			if(!this.state.isRotation()){ 
+				// move the shape
+				this.state.moveShape(shape, new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
 			}
-			else{
-				WorldToObjectConverterUtil converter = (WorldToObjectConverterUtil)UtilFactory.makeUtil("world_to_object_converter");
-				// instantiate dto to be passed into the converter
-				ConvertWorldToObjDto dto = new ConvertWorldToObjDto(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()), 
-																	shape.getCenter(), shape.getRotation());
-				// convert the point of interst to object coordinates
-				Point2D.Double objCoor = (Point2D.Double)converter.doUtil(dto);
-				
-				double newRotation = shape.getRotation() + Math.atan(-(objCoor.getX() / objCoor.getY()));;
-				if(objCoor.getY() < 0){
-					newRotation = shape.getRotation() + Math.atan((objCoor.getX() / -objCoor.getY()));
-				}
-				else if(objCoor.getX() < 0){
-					newRotation = shape.getRotation() + Math.atan((-objCoor.getX() / objCoor.getY()));
-				}
-
-				shape.setRotation(newRotation);
-				// IMPLEMENT ROTATION
+			else{ 
+				// rotate shape
+				this.state.rotateShape(shape, new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
 			}
 			ModelFacade.commitChange();
 		}
@@ -153,14 +141,6 @@ public class Controller implements CS355Controller{
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	private void resetSelection(){
-		if(this.state.getSelectedShape() > -1){
-			ModelFacade.getShape(this.state.getSelectedShape()).setIsSelected(false);
-			ModelFacade.commitChange();
-			this.state.setSelectedShape(-1);
-		}
 	}
 	
 	@Override
@@ -377,9 +357,10 @@ public class Controller implements CS355Controller{
 	@Override
 	public void doDeleteShape() {
 		if(this.state.getSelectedShape() > -1){
-			ModelFacade.deleteShape(this.state.getSelectedShape());
+			int selectedShape = this.state.getSelectedShape();
+			this.state.setSelectedShape(-1);
+			ModelFacade.deleteShape(selectedShape);
 		}
-		this.resetSelection();
 	}
 
 	@Override
@@ -453,6 +434,24 @@ public class Controller implements CS355Controller{
 		if(this.state.getSelectedShape() > -1){
 			int resultIndex = ModelFacade.moveToBack(this.state.getSelectedShape());
 			this.state.setSelectedShape(resultIndex);
+		}
+	}
+	
+	// Additional Methods:
+	public int getCurrentSelectedShape(){
+		if(!this.state.isDrawing()){
+			return this.state.getSelectedShape();
+		}
+		else{
+			return -1;
+		}
+	}
+	
+	private void resetSelection(){
+		// reset any shapes that are marked as selected
+		if(this.state.getSelectedShape() > -1){
+			this.state.setSelectedShape(-1);
+			ModelFacade.commitChange();
 		}
 	}
 	

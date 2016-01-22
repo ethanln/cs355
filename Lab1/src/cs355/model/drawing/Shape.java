@@ -22,7 +22,7 @@ public abstract class Shape {
 	
 	// additional fields
 	protected ShapeType shapeType;
-	protected boolean isSelected;
+	//protected boolean isSelected;
 
 	/**
 	 * Basic constructor that sets the field.
@@ -33,7 +33,7 @@ public abstract class Shape {
 		this.center = center;
 		this.rotation = 0.0;
 
-		this.isSelected = false;
+		///this.isSelected = false;
 	}
 
 	/**
@@ -93,13 +93,13 @@ public abstract class Shape {
 		this.shapeType = type;
 	}
 	
-	public boolean isSelected(){
+	/*public boolean isSelected(){
 		return this.isSelected;
 	}
 	
 	public void setIsSelected(boolean value){
 		this.isSelected = value;
-	}
+	}*/
 
 	/**
 	 * Used to test for whether the user clicked inside a shape or not.
@@ -109,11 +109,11 @@ public abstract class Shape {
 	 */
 	public abstract boolean pointInShape(Point2D.Double pt, double tolerance);
 	
-	public abstract Point2D.Double getHandleCenter();
+	//public abstract Point2D.Double getHandleCenter();
 	
-	public boolean isInHandle(Point2D.Double pt){
-		Circle handle = new Circle(Color.RED, this.getHandleCenter(), 10.0 / 2.0);
-		return handle.pointInShape(pt, 0.0);
-	}
+	//public boolean isInHandle(Point2D.Double pt){
+	//	Circle handle = new Circle(Color.RED, this.getHandleCenter(), 10.0 / 2.0);
+	//	return handle.pointInShape(pt, 0.0);
+	//}
 
 }

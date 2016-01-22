@@ -14,12 +14,15 @@ public abstract class ControllerState {
 	
 	private ToolType selectedTool;
 	private boolean isRotation;
+	private boolean isDrawing;
 	
 	public abstract void editShape(Shape shape, Point2D.Double p);
 	
 	public abstract Shape makeShape(Point2D.Double p);
 	
 	public abstract void moveShape(Shape shape, Point2D.Double p);
+	
+	public abstract void rotateShape(Shape shape, Point2D.Double p);
 
 	public Color getSelectedColor() {
 		return this.selectedColor;
@@ -59,5 +62,13 @@ public abstract class ControllerState {
 
 	public void setIsRotation(boolean isRotation) {
 		this.isRotation = isRotation;
+	}
+
+	public boolean isDrawing() {
+		return isDrawing;
+	}
+
+	public void setIsDrawing(boolean isDrawing) {
+		this.isDrawing = isDrawing;
 	}
 }
