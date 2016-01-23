@@ -97,6 +97,26 @@ public class Line extends Shape {
 			withinX = pointX > (this.center.getX() - tolerance) && pointX < (this.end.getX() + tolerance);
 			withinY = pointY < (this.center.getY() + tolerance) && pointY > (this.end.getY() - tolerance);
 		}
+		else if(this.center.getX() == this.end.getX()){
+			if(this.center.getY() < this.end.getY()){
+				withinX = pointX > (this.center.getX() - tolerance) && pointX < (this.end.getX() + tolerance);
+				withinY = pointY > (this.center.getY() - tolerance) && pointY < (this.end.getY() + tolerance);
+			}
+			else{
+				withinX = pointX < (this.center.getX() + tolerance) && pointX > (this.end.getX() - tolerance);
+				withinY = pointY < (this.center.getY() + tolerance) && pointY > (this.end.getY() - tolerance);
+			}
+		}
+		else if(this.center.getY() == this.end.getY()){
+			if(this.center.getX() < this.end.getX()){
+				withinX = pointX > (this.center.getX() - tolerance) && pointX < (this.end.getX() + tolerance);
+				withinY = pointY > (this.center.getY() - tolerance) && pointY < (this.end.getY() + tolerance);
+			}
+			else{
+				withinX = pointX < (this.center.getX() + tolerance) && pointX > (this.end.getX() - tolerance);
+				withinY = pointY < (this.center.getY() + tolerance) && pointY > (this.end.getY() - tolerance);
+			}
+		}
 		else{ // if start point of line is on bottom right of the grid
 			withinX = pointX < (this.center.getX() + tolerance) && pointX > (this.end.getX() - tolerance);
 			withinY = pointY < (this.center.getY() + tolerance) && pointY > (this.end.getY() - tolerance);
