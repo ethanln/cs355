@@ -1,5 +1,8 @@
 package cs355.definitions;
-
+/**
+ * Enumeration shape types
+ * @author ethan
+ */
 public enum ShapeType {
 	SQUARE,
 	CIRCLE,
@@ -9,6 +12,11 @@ public enum ShapeType {
 	TRIANGLE,
 	NONE;
 	
+	/**
+	 * Convert shape types to integer values
+	 * @param type
+	 * @return
+	 */
 	public static int toInt(ShapeType type){
 		switch(type){
 			case SQUARE:

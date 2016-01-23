@@ -120,28 +120,4 @@ public class Triangle extends Shape {
 				&& w2 <= 1 && w2 >= 0
 				&& w3 <= 1 && w3 >= 0;
 	}
-
-	/*@Override
-	public Double getHandleCenter() {
-		double lowestYPoint = Math.min(this.a.getY(), this.b.getY());
-		lowestYPoint = Math.min(lowestYPoint, this.c.getY());
-		
-		// get world to object coordinates converter from util factory
-		WorldToObjectConverterUtil converter = (WorldToObjectConverterUtil)UtilFactory.makeUtil("world_to_object_converter");
-		
-		// instantiate dto to be passed into the converter
-		ConvertWorldToObjDto dto = null;
-		if(lowestYPoint < 0.0){
-			dto = new ConvertWorldToObjDto(new Point2D.Double(super.center.getX(), super.center.getY() + (lowestYPoint - 20)), super.center, super.rotation);
-		}
-		else{
-			dto = new ConvertWorldToObjDto(new Point2D.Double(super.center.getX(), super.center.getY() - lowestYPoint - 20), super.center, super.rotation);
-		}
-		
-		// convert the point of interst to object coordinates
-		Point2D.Double objCoor = (Point2D.Double)converter.doUtil(dto);
-		
-		return new Point2D.Double(super.center.getX() - objCoor.getX(), super.center.getY() + objCoor.getY());
-
-	}*/
 }

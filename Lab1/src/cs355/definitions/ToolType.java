@@ -1,5 +1,10 @@
 package cs355.definitions;
 
+/**
+ * Enumeration Tool types
+ * @author ethan
+ *
+ */
 public enum ToolType {
 	SHAPE,
 	SELECT,
@@ -7,6 +12,11 @@ public enum ToolType {
 	ZOOM_OUT,
 	DEFAULT;
 	
+	/**
+	 * Convert tool types to integer values
+	 * @param type
+	 * @return
+	 */
 	public static int toInt(ToolType type){
 		switch(type){
 			case SHAPE:

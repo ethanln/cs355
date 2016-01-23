@@ -3,6 +3,7 @@ package cs355.controller.state;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
+import cs355.definitions.HandleType;
 import cs355.definitions.ShapeType;
 import cs355.dto.ConvertWorldToObjDto;
 import cs355.model.drawing.Line;
@@ -55,17 +56,19 @@ public class ControllerSelectState extends ControllerState{
 
 	@Override
 	public void rotateShape(Shape shape, Double p) {
-		if(shape.getShapeType() == ShapeType.LINE){
-			// figure out how to rotate lines
+		
+		if(shape.getShapeType() == ShapeType.LINE){ // if the shape is a line
+			
 			Line line = (Line)shape;
-			if(line.getRotatePoint() == 0){
+			if(super.getRotationHandle() == HandleType.LINE_START){ // if the handle is at the start of the line
 				line.setCenter(p);
 			}
-			else{
+			else if(super.getRotationHandle() == HandleType.LINE_END){ // if the handle is at the end of the line
 				line.setEnd(p);
 			}
 		}
-		else{
+		else{ // if the shape is not a line
+			// get world to object converter
 			WorldToObjectConverterUtil converter = (WorldToObjectConverterUtil)UtilFactory.makeUtil("world_to_object_converter");
 			// instantiate dto to be passed into the converter
 			ConvertWorldToObjDto dto = new ConvertWorldToObjDto(p, shape.getCenter(), shape.getRotation());

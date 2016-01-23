@@ -92,14 +92,6 @@ public abstract class Shape {
 	public void setShapeType(ShapeType type){
 		this.shapeType = type;
 	}
-	
-	/*public boolean isSelected(){
-		return this.isSelected;
-	}
-	
-	public void setIsSelected(boolean value){
-		this.isSelected = value;
-	}*/
 
 	/**
 	 * Used to test for whether the user clicked inside a shape or not.
@@ -108,12 +100,4 @@ public abstract class Shape {
 	 * @return true if pt is in the shape, false otherwise.
 	 */
 	public abstract boolean pointInShape(Point2D.Double pt, double tolerance);
-	
-	//public abstract Point2D.Double getHandleCenter();
-	
-	//public boolean isInHandle(Point2D.Double pt){
-	//	Circle handle = new Circle(Color.RED, this.getHandleCenter(), 10.0 / 2.0);
-	//	return handle.pointInShape(pt, 0.0);
-	//}
-
 }

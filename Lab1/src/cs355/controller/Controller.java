@@ -9,6 +9,7 @@ import java.util.Iterator;
 
 import cs355.GUIFunctions;
 import cs355.controller.state.*;
+import cs355.definitions.HandleType;
 import cs355.definitions.ToolType;
 import cs355.dto.*;
 import cs355.model.drawing.Shape;
@@ -56,9 +57,11 @@ public class Controller implements CS355Controller{
 				if(this.state.getSelectedShape() > -1){
 					PointInHandleDto dto = new PointInHandleDto(ModelFacade.getShape(this.state.getSelectedShape()), 
 										   new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
-				
-					if((boolean)UtilFactory.makeUtil("point_in_handle").doUtil(dto)){
+					
+					HandleType handleType = (HandleType)UtilFactory.makeUtil("point_in_handle").doUtil(dto);
+					if(handleType != HandleType.NONE){
 						this.state.setIsRotation(true);
+						this.state.setRotationHandle(handleType);
 						return;
 					}
 				}
@@ -351,6 +354,7 @@ public class Controller implements CS355Controller{
 
 	@Override
 	public void openDrawing(File file) {
+		this.resetSelection();
 		ModelFacade.open(file);
 	}
 

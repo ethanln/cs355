@@ -31,17 +31,22 @@ public class View implements ViewRefresher, Observer{
 		ArrayList<Shape> shapes = (ArrayList)ModelFacade.getShapes();
 		ArrayList<Shape> overlayShapes = new ArrayList<Shape>();
 		
+		// fetch selected shape from the controller
 		int selectedShape = this.controller.getCurrentSelectedShape();
 		
+		// if there is a selected shape
 		if(selectedShape > -1){
 
 			if(shapes.get(selectedShape).getShapeType() == ShapeType.LINE){ // if the shape is a line
-				// draw the handle overlays for the line shape
+				
 				Line line = (Line) shapes.get(selectedShape);
+				
+				// draw the handle overlays for the line shape
 				Circle overlayHandleStart = new Circle(Color.RED, line.getCenter(), 10.0 / 2.0);
 				overlayHandleStart.setShapeType(ShapeType.CIRCLE);
 				overlayHandleStart.setRotation(shapes.get(selectedShape).getRotation());
 				
+				// draw the handle overlays for the line shape
 				Circle overlayHandleEnd = new Circle(Color.RED, line.getEnd(), 10.0 / 2.0);
 				overlayHandleEnd.setShapeType(ShapeType.CIRCLE);
 				overlayHandleEnd.setRotation(shapes.get(selectedShape).getRotation());
@@ -50,9 +55,11 @@ public class View implements ViewRefresher, Observer{
 				overlayShapes.add(overlayHandleEnd);
 			}
 			else{  // if it is any other shape
-				// draw the handle and border overlay for other shapes
+				
+				// fetches the handle center of the shape
 				Point2D.Double handleCenter = (Point2D.Double)UtilFactory.makeUtil("handle-center").doUtil(shapes.get(selectedShape));
 				
+				// draw the handle and border overlay for other shapes
 				Circle overlayHandle = new Circle(Color.RED, handleCenter, 10.0 / 2.0);
 				overlayHandle.setShapeType(ShapeType.CIRCLE);
 				overlayHandle.setRotation(shapes.get(selectedShape).getRotation());
@@ -62,11 +69,13 @@ public class View implements ViewRefresher, Observer{
 			}
 		}
 		
+		// draw model shapes
 		for(int i = 0; i < shapes.size(); i++){
 			DrawableShape drawing = DrawableShapeFactory.getDrawableShape(shapes.get(i));
 			drawing.draw(g2d, "fill");
 		}
 		
+		// draw overlays
 		for(int i = 0; i < overlayShapes.size(); i++){
 			DrawableShape drawing = DrawableShapeFactory.getDrawableShape(overlayShapes.get(i));
 			drawing.draw(g2d, "border");
