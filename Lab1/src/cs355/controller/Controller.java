@@ -36,62 +36,92 @@ public class Controller implements CS355Controller{
 	public void mousePressed(MouseEvent e) {
 		
 		if(this.state.getSelectedTool() == ToolType.SHAPE){
-			Shape shape = this.state.makeShape(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
-			if(shape != null){
-				// if shape successfully creates, store the origin of the shape in the state, then add it to the model
-				this.state.setOrigin(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
-				int index = ModelFacade.addShape(shape);	
-				
-				// store the shape index as the currently selected shape in the state
-				this.state.setSelectedShape(index);
-				this.state.setIsDrawing(true);
-			}
+			// draw shape
+			this.doShapeTool(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
 		}
-		else if(this.state.getSelectedTool() == ToolType.SELECT){
-			// get all shapes in the model
-			ArrayList<Shape> shapes = (ArrayList<Shape>) ModelFacade.getShapes();
+		else if(this.state.getSelectedTool() == ToolType.SELECT){ // if current tool is Select
 			
-			// check for shapes that are already selected, and if the click falls within the handle of the selected shape
-			for(int i = shapes.size() - 1; i >= 0; i--){
-				// check if shape is selected and the click falls on the handle
-				if(this.state.getSelectedShape() > -1){
-					PointInHandleDto dto = new PointInHandleDto(ModelFacade.getShape(this.state.getSelectedShape()), 
-										   new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
-					
-					HandleType handleType = (HandleType)UtilFactory.makeUtil("point_in_handle").doUtil(dto);
-					if(handleType != HandleType.NONE){
-						this.state.setIsRotation(true);
-						this.state.setRotationHandle(handleType);
-						return;
-					}
-				}
+			// check if shape is selected and the click falls on the handle
+			if(this.checkIfHandleIsSelected(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()))){
+				return;
 			}
 			
 			// check of the click is within any of the shapes from front to back
-			for(int i = shapes.size() - 1; i >= 0; i--){
-				// if click falls within a shape
-				if(shapes.get(i).pointInShape(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()), 4.0)){ // check if the selection point is within the shape and the shape is not a Select shape border
-					
-					// reset selected shapes
-					this.resetSelection();
-					
-					// set origin of the click.
-					this.state.setOrigin(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()));
-
-					// store the shape as selected in the state
-					this.state.setSelectedShape(i);
-					
-					// set the color of new selected shape
-					Color selectedShapeColor = ModelFacade.getShape(i).getColor();
-					this.state.setSelectedColor(selectedShapeColor);
-					GUIFunctions.changeSelectedColor(selectedShapeColor);
-					GUIFunctions.refresh();
-
-					break;
-				}
-				this.resetSelection();
+			if(this.checkIfShapeIsSelected(new Point2D.Double(e.getPoint().getX(), e.getPoint().getY()))){
+				return;
 			}
 		}
+	}
+	
+	/**
+	 * draws shape
+	 * @param pt
+	 */
+	private void doShapeTool(Point2D.Double pt){
+		Shape shape = this.state.makeShape(new Point2D.Double(pt.getX(), pt.getY()));
+		if(shape != null){
+			// if shape successfully creates, store the origin of the shape in the state, then add it to the model
+			this.state.setOrigin(new Point2D.Double(pt.getX(), pt.getY()));
+			int index = ModelFacade.addShape(shape);	
+			
+			// store the shape index as the currently selected shape in the state
+			this.state.setSelectedShape(index);
+			this.state.setIsDrawing(true);
+		}
+	}
+	
+	/**
+	 * check if shape is selected and the click falls on the handle
+	 * @param pt
+	 * @return
+	 */
+	private boolean checkIfHandleIsSelected(Point2D.Double pt){
+		if(this.state.getSelectedShape() > -1){
+			PointInHandleDto dto = new PointInHandleDto(ModelFacade.getShape(this.state.getSelectedShape()), 
+								   new Point2D.Double(pt.getX(), pt.getY()));
+			
+			HandleType handleType = (HandleType)UtilFactory.makeUtil("point_in_handle").doUtil(dto);
+			if(handleType != HandleType.NONE){
+				this.state.setIsRotation(true);
+				this.state.setRotationHandle(handleType);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * check of the click is within any of the shapes from front to back
+	 * @param pt
+	 * @return
+	 */
+	private boolean checkIfShapeIsSelected(Point2D.Double pt){
+		// get all shapes from the model
+		ArrayList<Shape> shapes = (ArrayList<Shape>) ModelFacade.getShapes();
+		for(int i = shapes.size() - 1; i >= 0; i--){
+			// if click falls within a shape
+			if(shapes.get(i).pointInShape(new Point2D.Double(pt.getX(), pt.getY()), 4.0)){ // check if the selection point is within the shape and the shape is not a Select shape border
+				
+				// reset selected shapes
+				this.resetSelection();
+				
+				// set origin of the click.
+				this.state.setOrigin(new Point2D.Double(pt.getX(), pt.getY()));
+
+				// store the shape as selected in the state
+				this.state.setSelectedShape(i);
+				
+				// set the color of new selected shape
+				Color selectedShapeColor = ModelFacade.getShape(i).getColor();
+				this.state.setSelectedColor(selectedShapeColor);
+				GUIFunctions.changeSelectedColor(selectedShapeColor);
+				GUIFunctions.refresh();
+
+				return true;
+			}
+			this.resetSelection();
+		}
+		return false;
 	}
 
 	@Override
@@ -348,7 +378,6 @@ public class Controller implements CS355Controller{
 
 	@Override
 	public void saveDrawing(File file) {
-		this.resetSelection();
 		ModelFacade.save(file);
 	}
 

@@ -54,20 +54,54 @@ public class Line extends Shape {
 	 */
 	@Override
 	public boolean pointInShape(Double pt, double tolerance) {
-
-		double vectorAX = this.center.getX() - this.end.getX();
-		double vectorAY = this.center.getY() - this.end.getY();
 		
-		double vectorBX = this.center.getX() - pt.getX();
-		double vectorBY = this.center.getY() - pt.getY();
+		// get distance perpendicular to the actual line
+		double vectorAX = this.end.getX() - this.center.getX();
+		double vectorAY = this.end.getY() - this.center.getY();
+		
+		double vectorBX = pt.getX() - this.center.getX();
+		double vectorBY = pt.getY() - this.center.getY();
 		
 		double magnitudeA = Math.sqrt(Math.pow(vectorAX, 2) + Math.pow(vectorAY, 2));
 		double magnitudeB = Math.sqrt(Math.pow(vectorBX, 2) + Math.pow(vectorBY, 2));
 		double magnitudeC = ((vectorAX * vectorBX) + (vectorAY * vectorBY)) / magnitudeA;
 		
-		double distance = Math.sqrt(Math.pow(magnitudeB, 2) - Math.pow(magnitudeC, 2));
+		double distance = Math.sqrt(Math.abs(Math.pow(magnitudeB, 2) - Math.pow(magnitudeC, 2)));
 		
-		//I need to check if corresponding point is on the line from where the line was selected
-		return distance <= tolerance;
+		// Check to see if the the click is with in the line segment
+		double vectorOriginX = this.center.getX();
+		double vectorOriginY = this.center.getY();
+		
+		double t = magnitudeC / magnitudeA;
+		double pointX = 0.0;
+		double pointY = 0.0;
+
+		pointX = (t * vectorAX) + vectorOriginX;
+		pointY = (t * vectorAY) + vectorOriginY;
+		
+		boolean withinX = false;
+		boolean withinY = false;
+		
+		if(this.center.getX() < this.end.getX()
+				&& this.center.getY() < this.end.getY()){ // if start point of line is on upper left of the grid
+			withinX = pointX > (this.center.getX() - tolerance) && pointX < (this.end.getX() + tolerance);
+			withinY = pointY > (this.center.getY() - tolerance) && pointY < (this.end.getY() + tolerance);
+		}
+		else if(this.center.getX() > this.end.getX()
+				&& this.center.getY() < this.end.getY()){ // if start point of line is on upper right of the grid
+			withinX = pointX < (this.center.getX() + tolerance) && pointX > (this.end.getX() - tolerance);
+			withinY = pointY > (this.center.getY() - tolerance) && pointY < (this.end.getY() + tolerance);
+		}
+		else if(this.center.getX() < this.end.getX()
+				&& this.center.getY() > this.end.getY()){ // if start point of line is on bottom left of the grid
+			withinX = pointX > (this.center.getX() - tolerance) && pointX < (this.end.getX() + tolerance);
+			withinY = pointY < (this.center.getY() + tolerance) && pointY > (this.end.getY() - tolerance);
+		}
+		else{ // if start point of line is on bottom right of the grid
+			withinX = pointX < (this.center.getX() + tolerance) && pointX > (this.end.getX() - tolerance);
+			withinY = pointY < (this.center.getY() + tolerance) && pointY > (this.end.getY() - tolerance);
+		}
+		
+		return distance <= tolerance && withinX && withinY;
 	}
 }
