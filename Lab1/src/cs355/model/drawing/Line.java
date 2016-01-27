@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
+
 /**
  * Add your line code here. You can add fields, but you cannot
  * change the ones that already exist. This includes the names!
@@ -124,4 +125,27 @@ public class Line extends Shape {
 		
 		return distance <= tolerance && withinX && withinY;
 	}
+	
+	/*@Override
+	public boolean pointInShape(Double pt, double tolerance) {
+		//calculate all point vectors from origin
+		Vector2D p0Vector = new Vector2D(this.center.getX(), this.center.getY());
+		Vector2D p1Vector = new Vector2D(this.end.getX(), this.end.getY());
+		Vector2D qVector = new Vector2D(pt.getX(), pt.getY());
+		
+		Vector2D segmentVector = Vector2D.subtractVectors(p0Vector, p1Vector);
+		double segmentMagnitude = segmentVector.getMagnitude();
+		
+		Vector2D dHat = new Vector2D((segmentVector.getVectorX() / segmentMagnitude), (segmentVector.getVectorY() / segmentMagnitude));
+		
+		// subtract vectors p0 and q to get the scalar
+		Vector2D vectorsP0SubQ = Vector2D.subtractVectors(qVector, p0Vector);
+		double scalarT = Vector2D.getDotProduct(vectorsP0SubQ, dHat);
+		
+		Vector2D scalarVector = new Vector2D(dHat.getVectorX() * scalarT, dHat.getVectorY() * scalarT);
+		Vector2D pointOnLine = Vector2D.addVectors(p0Vector, scalarVector);
+		
+		boolean isOnLine = pointOnLine.getVectorX() <= this
+		return false;
+	}*/
 }
