@@ -125,8 +125,8 @@ public class Line extends Shape {
 		
 		return distance <= tolerance && withinX && withinY;
 	}
-	
-	/*@Override
+	/*
+	@Override
 	public boolean pointInShape(Double pt, double tolerance) {
 		//calculate all point vectors from origin
 		Vector2D p0Vector = new Vector2D(this.center.getX(), this.center.getY());
@@ -139,13 +139,18 @@ public class Line extends Shape {
 		Vector2D dHat = new Vector2D((segmentVector.getVectorX() / segmentMagnitude), (segmentVector.getVectorY() / segmentMagnitude));
 		
 		// subtract vectors p0 and q to get the scalar
-		Vector2D vectorsP0SubQ = Vector2D.subtractVectors(qVector, p0Vector);
-		double scalarT = Vector2D.getDotProduct(vectorsP0SubQ, dHat);
+		Vector2D vectorsP0SubQ = Vector2D.subtractVectors(p0Vector, qVector);
+		Vector2D scalarT = Vector2D.multiplyVectors(vectorsP0SubQ, dHat);
 		
-		Vector2D scalarVector = new Vector2D(dHat.getVectorX() * scalarT, dHat.getVectorY() * scalarT);
-		Vector2D pointOnLine = Vector2D.addVectors(p0Vector, scalarVector);
+		double scalarValue = Vector2D.getDotProduct(scalarT, dHat);
 		
-		boolean isOnLine = pointOnLine.getVectorX() <= this
-		return false;
+		Vector2D qPrimeVector = new Vector2D(p0Vector.getVectorX() + scalarValue, p0Vector.getVectorY() + scalarValue);
+		
+		boolean isOnLine = qPrimeVector.getVectorX() <= Math.max(this.center.getX(), this.end.getX()) + tolerance
+							&& qPrimeVector.getVectorX() >= Math.min(this.center.getX(), this.end.getX()) - tolerance
+							&& qPrimeVector.getVectorY() <= Math.max(this.center.getY(), this.end.getY()) + tolerance
+							&& qPrimeVector.getVectorY() >= Math.min(this.center.getY(), this.end.getY()) - tolerance;
+		
+		return isOnLine && Vector2D.subtractVectors(qVector, qPrimeVector).getMagnitude() <= tolerance;
 	}*/
 }

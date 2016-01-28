@@ -35,6 +35,12 @@ public class Vector2D {
 		return new Vector2D(newVectorX, newVectorY);
 	}
 	
+	public static Vector2D multiplyVectors(Vector2D v1, Vector2D v2){
+		double newVectorX = v2.getVectorX() * v1.getVectorX();
+		double newVectorY = v2.getVectorY() * v1.getVectorY();
+		return new Vector2D(newVectorX, newVectorY);
+	}
+	
 	public static Vector2D addVectors(Vector2D v1, Vector2D v2){
 		double newVectorX = v2.getVectorX() + v1.getVectorX();
 		double newVectorY = v2.getVectorY() + v1.getVectorY();

@@ -59,7 +59,6 @@ public class ModelFacade{
 
 	private int _moveToFront(int index) {
 		this.model.moveToFront(index);
-		this.model.notifyObservers();
 		return this.model.getShapes().size() - 1;
 	}
 	
@@ -70,7 +69,6 @@ public class ModelFacade{
 
 	private int _movetoBack(int index) {
 		this.model.movetoBack(index);
-		this.model.notifyObservers();
 		return 0;
 	}
 	
@@ -81,8 +79,6 @@ public class ModelFacade{
 
 	private int _moveForward(int index) {
 		this.model.moveForward(index);
-		this.model.notifyObservers();
-		
 		return index < (this.model.getShapes().size() - 1) ? (index + 1) : index;
 	}
 	
@@ -93,8 +89,6 @@ public class ModelFacade{
 
 	private int _moveBackward(int index) {
 		this.model.moveBackward(index);
-		this.model.notifyObservers();
-		
 		return index > 0 ? (index - 1) : index;
 	}
 	

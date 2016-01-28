@@ -372,6 +372,7 @@ public class Controller implements CS355Controller{
 		if(this.state.getSelectedShape() > -1){
 			int resultIndex = ModelFacade.moveForward(this.state.getSelectedShape());
 			this.state.setSelectedShape(resultIndex);
+			ModelFacade.commitChange();
 		}
 	}
 
@@ -380,6 +381,7 @@ public class Controller implements CS355Controller{
 		if(this.state.getSelectedShape() > -1){
 			int resultIndex = ModelFacade.moveBackward(this.state.getSelectedShape());
 			this.state.setSelectedShape(resultIndex);
+			ModelFacade.commitChange();
 		}	
 	}
 
@@ -388,6 +390,7 @@ public class Controller implements CS355Controller{
 		if(this.state.getSelectedShape() > -1){
 			int resultIndex = ModelFacade.moveToFront(this.state.getSelectedShape());
 			this.state.setSelectedShape(resultIndex);
+			ModelFacade.commitChange();
 		}
 	}
 
@@ -396,6 +399,7 @@ public class Controller implements CS355Controller{
 		if(this.state.getSelectedShape() > -1){
 			int resultIndex = ModelFacade.moveToBack(this.state.getSelectedShape());
 			this.state.setSelectedShape(resultIndex);
+			ModelFacade.commitChange();
 		}
 	}
 	
