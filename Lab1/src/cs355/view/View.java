@@ -16,7 +16,7 @@ import cs355.model.drawing.Circle;
 import cs355.model.drawing.Line;
 import cs355.model.drawing.Shape;
 import cs355.model.facade.ModelFacade;
-import cs355.util.UtilFactory;
+import cs355.util.HandleUtil;
 
 public class View implements ViewRefresher, Observer{
 
@@ -57,8 +57,7 @@ public class View implements ViewRefresher, Observer{
 			else{  // if it is any other shape
 				
 				// fetches the handle center of the shape
-				Point2D.Double handleCenter = (Point2D.Double)UtilFactory.makeUtil("handle-center").doUtil(shapes.get(selectedShape));
-				
+				Point2D.Double handleCenter = HandleUtil.getHandleCenter(shapes.get(selectedShape));
 				// draw the handle and border overlay for other shapes
 				Circle overlayHandle = new Circle(Color.RED, handleCenter, 10.0 / 2.0);
 				overlayHandle.setShapeType(ShapeType.CIRCLE);

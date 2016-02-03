@@ -5,8 +5,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
 import cs355.dto.ConvertWorldToObjDto;
-import cs355.util.UtilFactory;
-import cs355.util.WorldToObjectConverterUtil;
+import cs355.util.CoordinateConverterUtil;
 
 /**
  * Add your triangle code here. You can add fields, but you cannot
@@ -95,14 +94,11 @@ public class Triangle extends Shape {
 	 */
 	@Override
 	public boolean pointInShape(Double pt, double tolerance) {
-		// get world to object coordinates converter from util factory
-		WorldToObjectConverterUtil converter = (WorldToObjectConverterUtil)UtilFactory.makeUtil("world_to_object_converter");
-		
 		//instantiate dto to be passed into the converter
 		ConvertWorldToObjDto dto = new ConvertWorldToObjDto(pt, super.center, super.rotation);
 		
 		// convert the point of interst to object coordinates
-		Point2D.Double objCoor = (Point2D.Double)converter.doUtil(dto);
+		Point2D.Double objCoor = (Point2D.Double)CoordinateConverterUtil.convertWorldToObject(dto);
 		
 		// calulate weights
 		Point2D.Double p2 = new Point2D.Double((this.b.getX() - this.a.getX()), (this.b.getY() - this.a.getY()));

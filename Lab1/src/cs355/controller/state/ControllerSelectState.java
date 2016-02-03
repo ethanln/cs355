@@ -8,8 +8,7 @@ import cs355.definitions.ShapeType;
 import cs355.dto.ConvertWorldToObjDto;
 import cs355.model.drawing.Line;
 import cs355.model.drawing.Shape;
-import cs355.util.UtilFactory;
-import cs355.util.WorldToObjectConverterUtil;
+import cs355.util.CoordinateConverterUtil;
 
 public class ControllerSelectState extends ControllerState{
 	
@@ -68,14 +67,13 @@ public class ControllerSelectState extends ControllerState{
 			}
 		}
 		else{ // if the shape is not a line
-			// get world to object converter
-			WorldToObjectConverterUtil converter = (WorldToObjectConverterUtil)UtilFactory.makeUtil("world_to_object_converter");
 			// instantiate dto to be passed into the converter
 			ConvertWorldToObjDto dto = new ConvertWorldToObjDto(p, shape.getCenter(), shape.getRotation());
 			// convert the point of interst to object coordinates
-			Point2D.Double objCoor = (Point2D.Double)converter.doUtil(dto);
+			Point2D.Double objCoor = CoordinateConverterUtil.convertWorldToObject(dto);
 			
-			double newRotation = shape.getRotation() + Math.atan(-(objCoor.getX() / objCoor.getY()));
+			//double newRotation = shape.getRotation() + Math.atan(-(objCoor.getX() / objCoor.getY()));
+			double newRotation = shape.getRotation() + Math.atan2(objCoor.getX(), -objCoor.getY());
 			shape.setRotation(newRotation);
 		}
 	}

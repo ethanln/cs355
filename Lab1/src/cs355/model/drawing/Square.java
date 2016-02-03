@@ -5,8 +5,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
 import cs355.dto.ConvertWorldToObjDto;
-import cs355.util.UtilFactory;
-import cs355.util.WorldToObjectConverterUtil;
+import cs355.util.CoordinateConverterUtil;
 
 /**
  * Add your square code here. You can add fields, but you cannot
@@ -57,15 +56,11 @@ public class Square extends Shape {
 	 */
 	@Override
 	public boolean pointInShape(Double pt, double tolerance) {
-		
-		// get world to object coordinates converter from util factory
-		WorldToObjectConverterUtil converter = (WorldToObjectConverterUtil)UtilFactory.makeUtil("world_to_object_converter");
-		
 		// instantiate dto to be passed into the converter
 		ConvertWorldToObjDto dto = new ConvertWorldToObjDto(pt, super.center, super.rotation);
 		
 		// convert the point of interst to object coordinates
-		Point2D.Double objCoor = (Point2D.Double)converter.doUtil(dto);
+		Point2D.Double objCoor = CoordinateConverterUtil.convertWorldToObject(dto);
 		
 		// calculate bottom left corner and top right corner
 		Point2D.Double upperRight = new Point2D.Double((this.size / 2), -(this.size / 2));

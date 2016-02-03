@@ -14,7 +14,7 @@ import cs355.definitions.ToolType;
 import cs355.dto.*;
 import cs355.model.drawing.Shape;
 import cs355.model.facade.ModelFacade;
-import cs355.util.UtilFactory;
+import cs355.util.HandleUtil;
 
 public class Controller implements CS355Controller{
 
@@ -448,8 +448,8 @@ public class Controller implements CS355Controller{
 		if(this.state.getSelectedShape() > -1){
 			PointInHandleDto dto = new PointInHandleDto(ModelFacade.getShape(this.state.getSelectedShape()), 
 								   new Point2D.Double(pt.getX(), pt.getY()));
-			
-			HandleType handleType = (HandleType)UtilFactory.makeUtil("point_in_handle").doUtil(dto);
+
+			HandleType handleType = HandleUtil.isPointInHandle(dto);
 			if(handleType != HandleType.NONE){
 				this.state.setIsRotation(true);
 				this.state.setRotationHandle(handleType);

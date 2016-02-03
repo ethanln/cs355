@@ -7,8 +7,7 @@ import cs355.definitions.ShapeType;
 import cs355.dto.ConvertWorldToObjDto;
 import cs355.model.drawing.Shape;
 import cs355.model.drawing.Triangle;
-import cs355.util.UtilFactory;
-import cs355.util.WorldToObjectConverterUtil;
+import cs355.util.CoordinateConverterUtil;
 
 public class ControllerTriangleState extends ControllerState{
 	
@@ -43,18 +42,16 @@ public class ControllerTriangleState extends ControllerState{
 			completeTriangle.setCenter(new Point2D.Double(centerX, centerY));
 			this.constructedTriangle = null;
 			
-			//convert vertices to object coordinates
-			WorldToObjectConverterUtil converter = (WorldToObjectConverterUtil)UtilFactory.makeUtil("world_to_object_converter");
 			ConvertWorldToObjDto dto = null;
 			
 			dto = new ConvertWorldToObjDto(completeTriangle.getA(), completeTriangle.getCenter(), completeTriangle.getRotation());
-			completeTriangle.setA((Point2D.Double)converter.doUtil(dto));
+			completeTriangle.setA(CoordinateConverterUtil.convertWorldToObject(dto));
 			
 			dto.pointToConvert = completeTriangle.getB();
-			completeTriangle.setB((Point2D.Double)converter.doUtil(dto));
+			completeTriangle.setB(CoordinateConverterUtil.convertWorldToObject(dto));
 			
 			dto.pointToConvert = completeTriangle.getC();
-			completeTriangle.setC((Point2D.Double)converter.doUtil(dto));
+			completeTriangle.setC(CoordinateConverterUtil.convertWorldToObject(dto));
 			
 			// return the completed triangle
 			return completeTriangle;
