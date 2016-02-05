@@ -36,9 +36,22 @@ public abstract class DrawableShape {
 		return this.color;
 	}
 	
-	protected void ConvertObjToWorld(Point2D.Double center, double rotation){
+	/*protected void ConvertObjToWorld(Point2D.Double center, double rotation){
 		this.objToWorld = new AffineTransform();
 		this.objToWorld.translate(center.getX(), center.getY());
 		this.objToWorld.rotate(rotation);
+	}*/
+	
+	protected void ConvertObjToWorld(Point2D.Double center, double rotation){
+		// translation matrix
+		AffineTransform translate = new AffineTransform(1.0, 0.0, 0.0, 1.0, center.getX(), center.getY());
+		
+		// get rotation matrix
+		AffineTransform rotate = new AffineTransform(Math.cos(rotation), Math.sin(rotation), 
+													-Math.sin(rotation), Math.cos(rotation), 
+													 0.0, 0.0);
+		translate.concatenate(rotate);
+		
+		this.objToWorld = translate;
 	}
 }
