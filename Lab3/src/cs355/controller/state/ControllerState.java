@@ -13,7 +13,7 @@ public abstract class ControllerState {
 	protected int selectedShape;
 	protected Point2D.Double origin;
 	
-	protected double factor = 1.0;
+	protected double factor = 0.25;
 	protected Point2D.Double screenOrigin = new Point2D.Double(0.0, 0.0);
 	protected int HScrollPos = 0;
 	protected int VScrollPos = 0;

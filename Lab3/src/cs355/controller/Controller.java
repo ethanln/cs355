@@ -290,49 +290,61 @@ public class Controller implements CS355Controller{
 		GUIFunctions.refresh();
 	}
 
+	/**
+	 * zoom in
+	 */
 	@Override
 	public void zoomInButtonHit() {
 		
 		double newFactor = this.state.getFactor() * 2.0;
+		
+		// check if newFactor is beyond its limit
 		if(newFactor > 4.0){
 			return;
 		}
+		
 		this.state.setFactor(newFactor);
 		
-		double val = 256/newFactor;
+		double val = 0;
+		double newX = 0.0;
+		double newY = 0.0;
 		
-		if(newFactor > 1.0){
-
-			if(newFactor == 2.0){
-				this.state.setVScrollPos(this.state.getVScrollPos() + 128);
-				this.state.setHScrollPos(this.state.getHScrollPos() + 128);
-				this.state.setScreenOrigin(new Point2D.Double(this.state.getScreenOrigin().getX() + 128.0, this.state.getScreenOrigin().getY() + 128.0));
-			}
-			else{
-				this.state.setVScrollPos(this.state.getVScrollPos() + 64);
-				this.state.setHScrollPos(this.state.getHScrollPos() + 64);
-				this.state.setScreenOrigin(new Point2D.Double(this.state.getScreenOrigin().getX() + 64.0, this.state.getScreenOrigin().getY() + 64.0));
-			}
-			
+		if(newFactor < 1.0){
+			val = 512.0;
+			newX = this.state.getScreenOrigin().getX() + val;
+			newY = this.state.getScreenOrigin().getY() + val;
 		}
-		else if(newFactor < 1.0){
-			this.state.setScreenOrigin(new Point2D.Double(this.state.getScreenOrigin().getX() + val, this.state.getScreenOrigin().getY() + val));
-			this.state.setVScrollPos(0);
-			this.state.setHScrollPos(0);
+		else if(newFactor > 1.0){
+			if(newFactor == 2.0){
+				val = 128.0;
+				newX = this.state.getScreenOrigin().getX() + val;
+				newY = this.state.getScreenOrigin().getY() + val;
+			}
+			else if(newFactor == 4.0){
+				val = 64.0;
+				newX = this.state.getScreenOrigin().getX() + val;
+				newY = this.state.getScreenOrigin().getY() + val;
+			}
+
 		}
 		else{
-			this.state.setScreenOrigin(new Point2D.Double(0.0, 0.0));
-			this.state.setVScrollPos(0);
-			this.state.setHScrollPos(0);
+			val = 256.0;
+			newX = this.state.getScreenOrigin().getX() + val;
+			newY = this.state.getScreenOrigin().getY() + val;
 		}
 		
-		this.state.setZoomInOrOut(true);
-		
+		this.state.setScreenOrigin(new Point2D.Double(newX, newY));
+
 		GUIFunctions.setZoomText(newFactor);
 		
-		GUIFunctions.setVScrollBarMax(512);
-		GUIFunctions.setHScrollBarMax(512);
+		this.state.setVScrollPos((int)this.state.getScreenOrigin().getY());
+		this.state.setHScrollPos((int)this.state.getScreenOrigin().getX());
 		
+		this.state.setZoomInOrOut(true);
+
+		GUIFunctions.setVScrollBarMax(2048);
+		GUIFunctions.setHScrollBarMax(2048);
+
 		double newBarKnobSize = 512 / newFactor;
 		GUIFunctions.setHScrollBarKnob((int)newBarKnobSize);
 		GUIFunctions.setVScrollBarKnob((int)newBarKnobSize);
@@ -346,58 +358,96 @@ public class Controller implements CS355Controller{
 		
 	}
 
+	/**
+	 * zoom out
+	 */
 	@Override
 	public void zoomOutButtonHit() {
 		
 		double newFactor = this.state.getFactor() / 2.0;
 		
+		// check if newFactor is beyond its limit
 		if(newFactor < 0.25){
 			return;
 		}
-		this.state.setFactor(newFactor);
-
+		
+		double val = 0;
+		double newX = 0.0;
+		double newY = 0.0;
+		
 		if(newFactor < 1.0){
-			this.state.setScreenOrigin(new Point2D.Double(-((256 / newFactor) - 256), -((256 / newFactor) - 256)));
-		}
-		else if(newFactor > 1.0){
-
-			if(newFactor == 2.0){
-				this.state.setVScrollPos(this.state.getVScrollPos() - 64);
-				this.state.setHScrollPos(this.state.getHScrollPos() - 64);
-				this.state.setScreenOrigin(new Point2D.Double(this.state.getScreenOrigin().getX() - 64.0, this.state.getScreenOrigin().getY() - 64.0));
+			if(newFactor == 0.5){
+				val = 256.0;
+				newX = this.state.getScreenOrigin().getX() - val;
+				newY = this.state.getScreenOrigin().getY() - val;
 			}
 		}
-		else{
-			this.state.setScreenOrigin(new Point2D.Double(0.0, 0.0));
-			this.state.setVScrollPos(0);
-			this.state.setHScrollPos(0);
+		else if(newFactor > 1.0){
+			val = 64.0;
+			newX = this.state.getScreenOrigin().getX() - val;
+			newY = this.state.getScreenOrigin().getY() - val;
 		}
+		else{
+			val = 128.0;
+			newX = this.state.getScreenOrigin().getX() - val;
+			newY = this.state.getScreenOrigin().getY() - val;
+		}
+		
+		if(newX + (512 / newFactor) > 2048.0
+				&& newY + (512 / newFactor) > 2048.0){
+			this.state.setScreenOrigin(new Point2D.Double(2048.0 - (512 / newFactor), 2048.0 - (512 / newFactor)));
+		}
+		else if(newX + (512 / newFactor) > 2048.0){
+			this.state.setScreenOrigin(new Point2D.Double(2048.0 - (512 / newFactor), Math.max(newY, 0.0)));
+		}
+		else if(newY + (512 / newFactor) > 2048.0){
+			this.state.setScreenOrigin(new Point2D.Double(Math.max(newX, 0.0), 2048.0 - (512 / newFactor)));
+		}
+		else{
+			this.state.setScreenOrigin(new Point2D.Double(Math.max(newX, 0.0), Math.max(newY, 0.0)));
+		}
+		
+		this.state.setFactor(newFactor);
+
+		GUIFunctions.setZoomText(newFactor);
+			
+		this.state.setVScrollPos((int)this.state.getScreenOrigin().getY());
+		this.state.setHScrollPos((int)this.state.getScreenOrigin().getX());
 		
 		this.state.setZoomInOrOut(true);
 		
-		GUIFunctions.setZoomText(newFactor);
-		
-		if(newFactor == 1.0){
+		if(newFactor == .25){
 			GUIFunctions.setVScrollBarMax(0);
 			GUIFunctions.setHScrollBarMax(0);
 		}
 		else{
-			GUIFunctions.setVScrollBarMax(512);
-			GUIFunctions.setHScrollBarMax(512);
+			GUIFunctions.setVScrollBarMax(2048);
+			GUIFunctions.setHScrollBarMax(2048);
 		}
-		
-		double newBarKnobSize = 512 / newFactor;
-		GUIFunctions.setHScrollBarKnob((int)newBarKnobSize);
-		GUIFunctions.setVScrollBarKnob((int)newBarKnobSize);
+
 		
 		this.state.setZoomInOrOut(false);
 		
-		GUIFunctions.setVScrollBarPosit(this.state.getVScrollPos());
-		GUIFunctions.setHScrollBarPosit(this.state.getHScrollPos());
+		if(newFactor == 0.25){
+			GUIFunctions.setVScrollBarPosit(0);
+			GUIFunctions.setHScrollBarPosit(0);
+		}
+		else{
+			GUIFunctions.setVScrollBarPosit(this.state.getVScrollPos());
+			GUIFunctions.setHScrollBarPosit(this.state.getHScrollPos());
+		}
 	
+		double newBarKnobSize = 512 / newFactor;
+		GUIFunctions.setHScrollBarKnob((int)newBarKnobSize);
+		GUIFunctions.setVScrollBarKnob((int)newBarKnobSize);
+
 		GUIFunctions.refresh();
 	}
 
+	/**
+	 * horizontal scroll bar change
+	 * @param value
+	 */
 	@Override
 	public void hScrollbarChanged(int value) {
 		if(this.state.isZoomInOrOut()){
@@ -411,6 +461,10 @@ public class Controller implements CS355Controller{
 		GUIFunctions.refresh();
 	}
 
+	/**
+	 * vertical scroll bar change
+	 * @param value
+	 */
 	@Override
 	public void vScrollbarChanged(int value) {
 		if(this.state.isZoomInOrOut()){

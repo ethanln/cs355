@@ -1,0 +1,119 @@
+[
+  {
+    "size": 132.0,
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 956.0,
+      "y": 803.0
+    },
+    "rotation": -7.853981633974483,
+    "shapeType": "SQUARE",
+    "SHAPE_TYPE": "cs355.model.drawing.Square"
+  },
+  {
+    "width": 70.0,
+    "height": 215.0,
+    "color": {
+      "value": -6711040,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 800.0,
+      "y": 716.5
+    },
+    "rotation": 0.0,
+    "shapeType": "ELLIPSE",
+    "SHAPE_TYPE": "cs355.model.drawing.Ellipse"
+  },
+  {
+    "width": 191.0,
+    "height": 51.0,
+    "color": {
+      "value": -6724096,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 858.5,
+      "y": 679.5
+    },
+    "rotation": 9.354030093015773,
+    "shapeType": "RECTANGLE",
+    "SHAPE_TYPE": "cs355.model.drawing.Rectangle"
+  },
+  {
+    "size": 71.0,
+    "color": {
+      "value": -16724941,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 952.5,
+      "y": 743.5
+    },
+    "rotation": 0.0,
+    "shapeType": "SQUARE",
+    "SHAPE_TYPE": "cs355.model.drawing.Square"
+  },
+  {
+    "end": {
+      "x": 827.0,
+      "y": 930.5
+    },
+    "color": {
+      "value": -6710785,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 715.5,
+      "y": 643.5
+    },
+    "rotation": 0.0,
+    "shapeType": "LINE",
+    "SHAPE_TYPE": "cs355.model.drawing.Line"
+  },
+  {
+    "end": {
+      "x": 1007.0,
+      "y": 608.0
+    },
+    "color": {
+      "value": -6710785,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 737.0,
+      "y": 886.0
+    },
+    "rotation": 0.0,
+    "shapeType": "LINE",
+    "SHAPE_TYPE": "cs355.model.drawing.Line"
+  },
+  {
+    "a": {
+      "x": -64.66666666666669,
+      "y": 27.333333333333343
+    },
+    "b": {
+      "x": -2.6666666666666856,
+      "y": -53.66666666666666
+    },
+    "c": {
+      "x": 67.33333333333331,
+      "y": 26.333333333333343
+    },
+    "color": {
+      "value": -16737895,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 842.1666666666667,
+      "y": 765.1666666666666
+    },
+    "rotation": 5.818154573196316,
+    "shapeType": "TRIANGLE",
+    "SHAPE_TYPE": "cs355.model.drawing.Triangle"
+  }
+]

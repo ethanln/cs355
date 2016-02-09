@@ -1,0 +1,15 @@
+!SESSION 2016-02-08 03:35:16.549 -----------------------------------------------
+eclipse.buildId=4.4.0.I20140606-1215
+java.version=1.8.0_20
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -data /home/ethan/Desktop/Winter2016/cs355/GitRepo/Lab3 -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.ui.ide 4 4 2016-02-08 03:37:25.520
+!MESSAGE Problems saving workspace
+
+!ENTRY org.eclipse.ui.ide 2 1 2016-02-08 03:37:25.524
+!MESSAGE Problems occurred while trying to save the state of the workbench.
+!SUBENTRY 1 org.eclipse.core.resources 2 234 2016-02-08 03:37:25.524
+!MESSAGE The project description file (.project) for 'Lab3' was missing.  This file contains important information about the project.  A new project description file has been created, but some information about the project may have been lost.

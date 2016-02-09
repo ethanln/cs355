@@ -32,6 +32,7 @@ public class CS355 {
 		
 		GUIFunctions.setHScrollBarKnob(512);
 		GUIFunctions.setVScrollBarKnob(512);
+		GUIFunctions.setZoomText(0.25);
 		
 		GUIFunctions.changeSelectedColor(Color.WHITE);
 		GUIFunctions.refresh();
