@@ -1,57 +1,82 @@
 [
   {
-    "size": 132.0,
+    "width": 604.0,
+    "height": 116.0,
     "color": {
       "value": -1,
       "falpha": 0.0
     },
     "center": {
-      "x": 956.0,
-      "y": 803.0
-    },
-    "rotation": -7.853981633974483,
-    "shapeType": "SQUARE",
-    "SHAPE_TYPE": "cs355.model.drawing.Square"
-  },
-  {
-    "width": 70.0,
-    "height": 215.0,
-    "color": {
-      "value": -6711040,
-      "falpha": 0.0
-    },
-    "center": {
-      "x": 800.0,
-      "y": 716.5
+      "x": 1066.0,
+      "y": 942.0
     },
     "rotation": 0.0,
     "shapeType": "ELLIPSE",
     "SHAPE_TYPE": "cs355.model.drawing.Ellipse"
   },
   {
-    "width": 191.0,
-    "height": 51.0,
+    "a": {
+      "x": -197.33333333333337,
+      "y": -89.33333333333337
+    },
+    "b": {
+      "x": -21.33333333333337,
+      "y": 282.66666666666663
+    },
+    "c": {
+      "x": 218.66666666666663,
+      "y": -193.33333333333337
+    },
     "color": {
-      "value": -6724096,
+      "value": -16751002,
       "falpha": 0.0
     },
     "center": {
-      "x": 858.5,
-      "y": 679.5
+      "x": 1009.3333333333334,
+      "y": 821.3333333333334
     },
-    "rotation": 9.354030093015773,
+    "rotation": 0.0,
+    "shapeType": "TRIANGLE",
+    "SHAPE_TYPE": "cs355.model.drawing.Triangle"
+  },
+  {
+    "width": 136.0,
+    "height": 676.0,
+    "color": {
+      "value": -10040320,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 1036.0,
+      "y": 870.0
+    },
+    "rotation": 0.0,
     "shapeType": "RECTANGLE",
     "SHAPE_TYPE": "cs355.model.drawing.Rectangle"
   },
   {
-    "size": 71.0,
+    "radius": 134.0,
     "color": {
-      "value": -16724941,
+      "value": -10066432,
       "falpha": 0.0
     },
     "center": {
-      "x": 952.5,
-      "y": 743.5
+      "x": 1014.0,
+      "y": 890.0
+    },
+    "rotation": 0.0,
+    "shapeType": "CIRCLE",
+    "SHAPE_TYPE": "cs355.model.drawing.Circle"
+  },
+  {
+    "size": 168.0,
+    "color": {
+      "value": -6750208,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 836.0,
+      "y": 872.0
     },
     "rotation": 0.0,
     "shapeType": "SQUARE",
@@ -59,61 +84,19 @@
   },
   {
     "end": {
-      "x": 827.0,
-      "y": 930.5
+      "x": 1316.0,
+      "y": 656.0
     },
     "color": {
-      "value": -6710785,
+      "value": -10092289,
       "falpha": 0.0
     },
     "center": {
-      "x": 715.5,
-      "y": 643.5
+      "x": 760.0,
+      "y": 1068.0
     },
     "rotation": 0.0,
     "shapeType": "LINE",
     "SHAPE_TYPE": "cs355.model.drawing.Line"
-  },
-  {
-    "end": {
-      "x": 1007.0,
-      "y": 608.0
-    },
-    "color": {
-      "value": -6710785,
-      "falpha": 0.0
-    },
-    "center": {
-      "x": 737.0,
-      "y": 886.0
-    },
-    "rotation": 0.0,
-    "shapeType": "LINE",
-    "SHAPE_TYPE": "cs355.model.drawing.Line"
-  },
-  {
-    "a": {
-      "x": -64.66666666666669,
-      "y": 27.333333333333343
-    },
-    "b": {
-      "x": -2.6666666666666856,
-      "y": -53.66666666666666
-    },
-    "c": {
-      "x": 67.33333333333331,
-      "y": 26.333333333333343
-    },
-    "color": {
-      "value": -16737895,
-      "falpha": 0.0
-    },
-    "center": {
-      "x": 842.1666666666667,
-      "y": 765.1666666666666
-    },
-    "rotation": 5.818154573196316,
-    "shapeType": "TRIANGLE",
-    "SHAPE_TYPE": "cs355.model.drawing.Triangle"
   }
 ]

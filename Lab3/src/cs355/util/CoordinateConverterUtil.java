@@ -21,27 +21,6 @@ public class CoordinateConverterUtil {
 		return instance;
 	}
 	
-	/*private Point2D.Double _convertWorldToObject(ConvertWorldToObjDto dto) {
-		try{
-			Point2D.Double objCoor = new Point2D.Double();
-			AffineTransform worldToObj = new AffineTransform();
-			
-			if(dto.rotation != 0.0){
-				worldToObj.rotate(-dto.rotation);
-			}
-			
-			worldToObj.translate(-dto.center.getX(), -dto.center.getY());
-			worldToObj.transform(dto.pointToConvert, objCoor);
-			
-			return objCoor;
-		}
-		catch(Exception e){
-			
-		}
-
-		return null;
-	}*/
-	
 	/*
 	 *  world to object
 	 */

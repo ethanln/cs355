@@ -12,6 +12,7 @@ import cs355.controller.Controller;
 import cs355.definitions.ShapeType;
 import cs355.drawable.shape.DrawableShape;
 import cs355.drawable.shape.factory.DrawableShapeFactory;
+import cs355.dto.ConvertShapeToDrawableShapeDto;
 import cs355.model.drawing.Circle;
 import cs355.model.drawing.Line;
 import cs355.model.drawing.Shape;
@@ -70,13 +71,13 @@ public class View implements ViewRefresher, Observer{
 		
 		// draw model shapes
 		for(int i = 0; i < shapes.size(); i++){
-			DrawableShape drawing = DrawableShapeFactory.getDrawableShape(shapes.get(i), this.controller.getScreenOrigin(), this.controller.getFactor());
+			DrawableShape drawing = DrawableShapeFactory.getDrawableShape(new ConvertShapeToDrawableShapeDto(shapes.get(i), this.controller.getScreenOrigin(), this.controller.getFactor()));
 			drawing.draw(g2d, "fill");
 		}
 		
 		// draw overlays
 		for(int i = 0; i < overlayShapes.size(); i++){
-			DrawableShape drawing = DrawableShapeFactory.getDrawableShape(overlayShapes.get(i), this.controller.getScreenOrigin(), this.controller.getFactor());
+			DrawableShape drawing = DrawableShapeFactory.getDrawableShape(new ConvertShapeToDrawableShapeDto(overlayShapes.get(i), this.controller.getScreenOrigin(), this.controller.getFactor()));
 			drawing.draw(g2d, "border");
 		}
 	}

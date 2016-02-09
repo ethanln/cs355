@@ -57,7 +57,7 @@ public class Line extends Shape {
 	 */
 	@Override
 	public boolean pointInShape(Point2D.Double pt, Point2D.Double screenOrigin, double tolerance, double factor) {
-		
+		tolerance /= factor;
 		Point2D.Double pW = CoordinateConverterUtil.convertScreenToWorld(new ConvertScreenToWorldDto(screenOrigin, 
 						pt, factor));
 		

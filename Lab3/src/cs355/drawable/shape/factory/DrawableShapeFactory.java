@@ -1,10 +1,8 @@
 package cs355.drawable.shape.factory;
 
-import java.awt.geom.Point2D;
-
 import cs355.definitions.ShapeType;
 import cs355.drawable.shape.*;
-import cs355.model.drawing.Shape;
+import cs355.dto.ConvertShapeToDrawableShapeDto;
 
 public class DrawableShapeFactory {
 	private static DrawableShapeFactory instance;
@@ -18,35 +16,35 @@ public class DrawableShapeFactory {
 		return instance;
 	}
 	
-	private DrawableShape _getDrawableShape(Shape shape, Point2D.Double screenOrigin, double factor){
-		int shapeType = ShapeType.toInt(shape.getShapeType());
+	private DrawableShape _getDrawableShape(ConvertShapeToDrawableShapeDto dto){
+		int shapeType = ShapeType.toInt(dto.shape.getShapeType());
 		
 		switch(shapeType){
 		case 0:
 			// if square
-			return new DrawableSquare(shape, screenOrigin, factor);
+			return new DrawableSquare(dto);
 		case 1:
 			// if circle
-			return new DrawableCircle(shape, screenOrigin, factor);
+			return new DrawableCircle(dto);
 		case 2:
 			// if ellipse
-			return new DrawableEllipse(shape, screenOrigin, factor);
+			return new DrawableEllipse(dto);
 		case 3:
 			// if line
-			return new DrawableLine(shape, screenOrigin, factor);
+			return new DrawableLine(dto);
 		case 4: 
 			// if rectangle
-			return new DrawableRectangle(shape, screenOrigin, factor);
+			return new DrawableRectangle(dto);
 		case 5:
 			// if triangle
-			return new DrawableTriangle(shape, screenOrigin, factor);
+			return new DrawableTriangle(dto);
 		default:
 			break;
 		}
 		return null;
 	}
 	
-	public static DrawableShape getDrawableShape(Shape shape, Point2D.Double screenOrigin, double factor){
-		return inst()._getDrawableShape(shape, screenOrigin, factor);
+	public static DrawableShape getDrawableShape(ConvertShapeToDrawableShapeDto dto){
+		return inst()._getDrawableShape(dto);
 	}
 }
