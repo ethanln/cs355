@@ -622,6 +622,10 @@ public class Controller implements CS355Controller{
 		}
 	}
 	
+	public void setZoomInOrOut(boolean isZoomInOrOut){
+		this.state.setZoomInOrOut(isZoomInOrOut);
+	}
+	
 	public double getFactor(){
 		return this.state.getFactor();
 	}

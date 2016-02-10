@@ -19,6 +19,7 @@ public abstract class DrawableShape {
 	public void draw(Graphics2D g2d, String fillType){
 		
 		g2d.setTransform(objToScreen);
+		g2d.setStroke(new BasicStroke(0));
 		if(fillType == "fill"){
 			g2d.setPaint(this.color);
 			g2d.draw(this.shape);
@@ -26,7 +27,6 @@ public abstract class DrawableShape {
 		}
 		else if(fillType == "border"){
 			g2d.setPaint(Color.RED);
-			g2d.setStroke(new BasicStroke(0));
 			g2d.draw(this.shape);
 		}
 	}

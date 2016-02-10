@@ -24,17 +24,31 @@ public class CS355 {
 		View view = new View(controller);
 		
 		GUIFunctions.createCS355Frame(controller, view);
-		GUIFunctions.setHScrollBarMax(512);
+		
+		double newBarKnobSize = 512 / controller.getFactor();
+		
+		controller.setZoomInOrOut(true);
+		
+		GUIFunctions.setHScrollBarMax(2048);
 		GUIFunctions.setHScrollBarMin(0);
 		
-		GUIFunctions.setVScrollBarMax(512);
+		GUIFunctions.setVScrollBarMax(2048);
 		GUIFunctions.setVScrollBarMin(0);
+
+		GUIFunctions.setHScrollBarKnob((int)newBarKnobSize);
+		GUIFunctions.setVScrollBarKnob((int)newBarKnobSize);
 		
-		GUIFunctions.setHScrollBarKnob(512);
-		GUIFunctions.setVScrollBarKnob(512);
-		GUIFunctions.setZoomText(0.25);
+		GUIFunctions.setHScrollBarPosit((int)controller.getScreenOrigin().getX());
+		GUIFunctions.setVScrollBarPosit((int)controller.getScreenOrigin().getY());
+		
+		controller.setZoomInOrOut(false);
+		
+		GUIFunctions.setZoomText(controller.getFactor());
 		
 		GUIFunctions.changeSelectedColor(Color.WHITE);
+		
+		
+		
 		GUIFunctions.refresh();
 	}
 }
