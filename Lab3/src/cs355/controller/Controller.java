@@ -14,17 +14,22 @@ import cs355.definitions.ToolType;
 import cs355.dto.*;
 import cs355.model.drawing.Shape;
 import cs355.model.facade.ModelFacade;
+import cs355.model.facade.SceneFacade;
 import cs355.util.HandleUtil;
 
 public class Controller implements CS355Controller{
 
 	private ControllerState state;
+	private ControllerState state3D;
 	
 	public Controller(){
 		this.state = new ControllerDefaultState();
 		this.state.setSelectedColor(Color.WHITE);
 		this.state.setSelectedTool(ToolType.DEFAULT);
 		this.state.setSelectedShape(-1);
+
+		this.state3D = new Controller3DState(SceneFacade.getCameraPosition(), SceneFacade.getCameraRotation(), 512.0, 512.0);
+		this.state3D.setSelectedTool(ToolType.VIEW_3D);
 	}
 	
 	@Override
@@ -480,20 +485,98 @@ public class Controller implements CS355Controller{
 
 	@Override
 	public void openScene(File file) {
-		// TODO Auto-generated method stub
-		
+
+		if(SceneFacade.open(file)){
+			Controller3DState state3D = (Controller3DState)this.state3D;
+			state3D.setCamPos(SceneFacade.getCameraPosition());
+			state3D.setCamRot(SceneFacade.getCameraRotation());
+			GUIFunctions.refresh();
+		}
 	}
 
 	@Override
 	public void toggle3DModelDisplay() {
-		// TODO Auto-generated method stub
+		Controller3DState state3D = (Controller3DState)this.state3D;
 		
+		if(!state3D.isActive()){
+			state3D.setActive(true);
+		}
+		else{
+			state3D.setActive(false);
+		}
+
+    	GUIFunctions.refresh();
 	}
 
 	@Override
 	public void keyPressed(Iterator<Integer> iterator) {
-		// TODO Auto-generated method stub
+		Controller3DState state3D = (Controller3DState)this.state3D;
 		
+		if(!state3D.isActive()){
+			return;
+		}
+		
+		int key = -1;
+		
+		while(iterator.hasNext()){
+			key = iterator.next();
+
+		 	if(key == 65){
+		    	// Move Left 65  	
+		    	state3D.getCamPos().z += 0.5 * Math.sin(Math.toRadians(state3D.getCamRot()));
+		    	state3D.getCamPos().x += 0.5 * Math.cos(Math.toRadians(state3D.getCamRot()));
+		        System.out.println("You are pressing A!");
+		    }
+		    else if(key == 68){
+		    	// Move Right 68
+		    	state3D.getCamPos().z -= 0.5 * Math.sin(Math.toRadians(state3D.getCamRot()));
+		    	state3D.getCamPos().x -= 0.5 * Math.cos(Math.toRadians(state3D.getCamRot()));
+		    	System.out.println("You are pressing D!");
+		    }
+		    else if(key == 87){
+		    	// Move Forward 87
+		    	state3D.getCamPos().z += 0.5 * Math.sin(Math.toRadians(state3D.getCamRot() + 90));
+		    	state3D.getCamPos().x += 0.5 * Math.cos(Math.toRadians(state3D.getCamRot() + 90));
+		    	state3D.getCamPos().z += 0.5 * Math.sin(Math.toRadians(0));
+		    	System.out.println("You are pressing W!");
+		    }
+		    else if(key == 83){
+		    	// Move Backward 83
+		    	state3D.getCamPos().z -= 0.5 * Math.sin(Math.toRadians(state3D.getCamRot() + 90));
+		    	state3D.getCamPos().x -= 0.5 * Math.cos(Math.toRadians(state3D.getCamRot() + 90));
+		    	state3D.getCamPos().z -= 0.5 * Math.sin(Math.toRadians(0));
+		    	System.out.println("You are pressing S!");
+		    }
+		    else if(key == 81){
+		    	// Turn Left 81
+		    	state3D.setCamRot(-0.5);
+		    	System.out.println("You are pressing Q!");
+		    }
+		    else if(key == 69){
+		    	// Turn Right 69
+		    	state3D.setCamRot(0.5);
+		    	System.out.println("You are pressing E!");
+		    }
+		    else if(key == 82){
+		    	// Move Up 82
+		    	state3D.setCamPosY(-0.5);
+		    	System.out.println("You are pressing R!");
+		    }
+		    else if(key == 70){
+		    	// Move Down 70
+		    	state3D.setCamPosY(0.5);
+		    	System.out.println("You are pressing F!");
+		    }
+		    else if(key == 72){
+		    	// Return to the original home position and orientation 72
+		    	state3D.setCamPos(SceneFacade.getCameraPosition());
+		    	state3D.setCamRot(SceneFacade.getCameraRotation());
+		    	
+		    	System.out.println("You are pressing H!");
+		    }
+		}
+		
+		GUIFunctions.refresh();
 	}
 
 	@Override
@@ -632,6 +715,11 @@ public class Controller implements CS355Controller{
 	
 	public Point2D.Double getScreenOrigin(){
 		return this.state.getScreenOrigin();
+	}
+	
+	public boolean is3D(){
+		Controller3DState state3D = (Controller3DState)this.state3D;
+		return state3D.isActive();
 	}
 	
 	private void resetSelection(){

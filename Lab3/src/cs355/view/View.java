@@ -17,6 +17,7 @@ import cs355.model.drawing.Circle;
 import cs355.model.drawing.Line;
 import cs355.model.drawing.Shape;
 import cs355.model.facade.ModelFacade;
+import cs355.model.facade.SceneFacade;
 import cs355.util.HandleUtil;
 
 public class View implements ViewRefresher, Observer{
@@ -24,6 +25,7 @@ public class View implements ViewRefresher, Observer{
 	private Controller controller;
 	public View(Controller controller){
 		ModelFacade.addObserver(this);
+		SceneFacade.addObserver(this);
 		this.controller = controller;
 	}
 	
@@ -80,6 +82,19 @@ public class View implements ViewRefresher, Observer{
 			DrawableShape drawing = DrawableShapeFactory.getDrawableShape(new ConvertShapeToDrawableShapeDto(overlayShapes.get(i), this.controller.getScreenOrigin(), this.controller.getFactor()));
 			drawing.draw(g2d, "border");
 		}
+		
+		// draw 3d, if toggled on.
+		if(this.controller.is3D()){
+			this.draw3D(g2d);
+		}
+	}
+	
+	private void draw3D(Graphics2D g2d){
+		// IMPLEMENT
+		// MODEL VIEW
+		// PROJECTION
+		// Clip Matrix
+		// iterate all lines
 	}
 	
 	@Override

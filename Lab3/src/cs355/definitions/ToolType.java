@@ -10,7 +10,8 @@ public enum ToolType {
 	SELECT,
 	ZOOM_IN,
 	ZOOM_OUT,
-	DEFAULT;
+	DEFAULT,
+	VIEW_3D;
 	
 	/**
 	 * Convert tool types to integer values
@@ -29,6 +30,8 @@ public enum ToolType {
 				return 4;
 			case DEFAULT:
 				return 5;
+			case VIEW_3D:
+				return 6;
 			default:
 				return -1;
 		}
