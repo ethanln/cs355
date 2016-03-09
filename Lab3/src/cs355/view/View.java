@@ -2,6 +2,7 @@ package cs355.view;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import cs355.definitions.MatrixMode;
 import cs355.definitions.ShapeType;
 import cs355.drawable.shape.DrawableShape;
 import cs355.drawable.shape.factory.DrawableShapeFactory;
+import cs355.dto.ConvertObjToScreenDto;
 import cs355.dto.ConvertShapeToDrawableShapeDto;
 import cs355.matrix.Graphics3D;
 import cs355.matrix.Matrix3D;
@@ -25,6 +27,7 @@ import cs355.model.facade.SceneFacade;
 import cs355.model.scene.Instance;
 import cs355.model.scene.Line3D;
 import cs355.model.scene.Point3D;
+import cs355.util.CoordinateConverterUtil;
 import cs355.util.HandleUtil;
 
 public class View implements ViewRefresher, Observer{
@@ -148,6 +151,10 @@ public class View implements ViewRefresher, Observer{
 					Point2D end = this.convertToScreenCoor(clip3Dend);
 					Point2D start = this.convertToScreenCoor(clip3Dstart);
 					
+					AffineTransform objToScreen = CoordinateConverterUtil.convertObjToScreen(
+												  new ConvertObjToScreenDto(new Point2D.Double(0.0, 0.0), 
+														  					new Point2D.Double(this.controller.getScreenOrigin().x, this.controller.getScreenOrigin().y), 0.0, this.controller.getFactor()));
+					g2d.setTransform(objToScreen);
 					g2d.setPaint(instance.getColor());
 					Line2D.Double shapeLine = new Line2D.Double(end.getX(), end.getY(), start.getX(), start.getY());
 					g2d.draw(shapeLine);
@@ -177,8 +184,8 @@ public class View implements ViewRefresher, Observer{
 	
 	private Point2D convertToScreenCoor(double[] vector3D){
 		Point2D.Double point = new Point2D.Double();
-		double[][] screenMatrix = new double[][]{{512.0 / 2.0, 0.0,          512.0 / 2.0},
-												 {0.0,         512.0 / 2.0,  512.0 / 2.0},
+		double[][] screenMatrix = new double[][]{{2048.0 / 2.0, 0.0,          2048.0 / 2.0},
+												 {0.0,         2048.0 / 2.0,  2048.0 / 2.0},
 												 {0.0,		   0.0,		     1.0}};
 		double w = vector3D[3];
 		vector3D[0] /= w;
