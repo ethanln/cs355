@@ -101,5 +101,9 @@ public class Controller3DState extends ControllerState{
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
+	
+	public void resetCamRot(double rotation){
+		this.camRot = rotation;
+	}
 
 }

@@ -10,6 +10,7 @@ import java.util.Observer;
 
 import cs355.GUIFunctions;
 import cs355.controller.Controller;
+import cs355.definitions.MatrixMode;
 import cs355.definitions.ShapeType;
 import cs355.drawable.shape.DrawableShape;
 import cs355.drawable.shape.factory.DrawableShapeFactory;
@@ -96,16 +97,34 @@ public class View implements ViewRefresher, Observer{
 	}
 	
 	private void draw3D(Graphics2D g2d){
+		// get graphics object
 		Graphics3D graphics = this.controller.getGraphicsSetup();
+		
+		// get projection and model view matrices.
 		Matrix3D projection = graphics.getProjectionMatrix();
 		Matrix3D modelView = graphics.getModelViewMatrix();
 		
+		// get instances
 		ArrayList<Instance> instances = SceneFacade.instances();
 		for(int i = 0; i < instances.size(); i++){
 			// get instance
 			Instance instance = instances.get(i);
+			
 			// get instance lines
 			ArrayList<Line3D> lines = (ArrayList)instance.getModel().getLines();
+			
+			double instanceAngle = instance.getRotAngle();
+			Point3D instancePos = instance.getPosition();
+			
+			// transform instances for camera view
+			graphics.mode(MatrixMode.MODELVIEW);
+			graphics.loadIdentityMatrix();
+			graphics.rotate(Math.toRadians(this.controller.getCamRot()), 0.0, 1.0, 0.0);
+			graphics.translate(-this.controller.getCamPos().x, -this.controller.getCamPos().y, -this.controller.getCamPos().z);
+			
+			// transform instances in relation to camera position
+			graphics.translate(instancePos.x, instancePos.y, instancePos.z);
+			graphics.rotate(Math.toRadians(instanceAngle), 0.0, 1.0, 0.0);
 			
 			// for each line
 			for(int j = 0; j < lines.size(); j++){
@@ -129,7 +148,7 @@ public class View implements ViewRefresher, Observer{
 					Point2D end = this.convertToScreenCoor(clip3Dend);
 					Point2D start = this.convertToScreenCoor(clip3Dstart);
 					
-					g2d.setPaint(Color.RED);
+					g2d.setPaint(instance.getColor());
 					Line2D.Double shapeLine = new Line2D.Double(end.getX(), end.getY(), start.getX(), start.getY());
 					g2d.draw(shapeLine);
 					g2d.fill(shapeLine);
@@ -159,7 +178,7 @@ public class View implements ViewRefresher, Observer{
 	private Point2D convertToScreenCoor(double[] vector3D){
 		Point2D.Double point = new Point2D.Double();
 		double[][] screenMatrix = new double[][]{{512.0 / 2.0, 0.0,          512.0 / 2.0},
-												 {0.0,         512.0 / 2.0, 512.0 / 2.0},
+												 {0.0,         512.0 / 2.0,  512.0 / 2.0},
 												 {0.0,		   0.0,		     1.0}};
 		double w = vector3D[3];
 		vector3D[0] /= w;

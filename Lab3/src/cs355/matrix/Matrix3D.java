@@ -26,28 +26,12 @@ public class Matrix3D implements IMatrix{
 
 	@Override
 	public void rotate(double orientation, double x, double y, double z) {
-		/*double[][] rotationMatrix = new double[][]{{1.0, 0.0, 0.0, 0.0},
-													 {0.0, 1.0, 0.0, 0.0},
-													 {0.0, 0.0, 1.0, 0.0},
-													 {0.0, 0.0, 0.0, 1.0}};*/
 		
 		double[][] rotationMatrixY = new double[][]{{Math.cos(orientation),  0.0, Math.sin(orientation), 0.0},
 												   {0.0, 				    1.0, 0.0, 				    0.0},
 												   {-Math.sin(orientation), 0.0, Math.cos(orientation), 0.0},
 												   {0.0, 					0.0, 0.0, 				    1.0}};
 		
-		/*double[][] rotationMatrixX = new double[][]{{1.0,  					0.0, 				   0.0, 				    0.0},
-												   {0.0, 				    Math.cos(orientation), -Math.sin(orientation),  0.0},
-												   {0.0, 					Math.sin(orientation), Math.cos(orientation),   0.0},
-												   {0.0, 					0.0, 				   0.0, 				    1.0}};
-		
-		double[][] rotationMatrixZ = new double[][]{{Math.cos(orientation),  -Math.sin(orientation), 0.0, 0.0},
-												    {Math.sin(orientation),  Math.cos(orientation),	 0.0, 0.0},
-												    {0.0, 					 0.0, 					 1.0, 0.0},
-												    {0.0, 					 0.0, 					 0.0, 1.0}};*/
-		//rotationMatrix = multiplyMatrix(rotationMatrix, rotationMatrixX);
-		//rotationMatrix = multiplyMatrix(rotationMatrix, rotationMatrixY);
-		//rotationMatrix = multiplyMatrix(rotationMatrix, rotationMatrixZ);
 		
 		this.matrix = multiplyMatrix(this.matrix, rotationMatrixY);
 	}

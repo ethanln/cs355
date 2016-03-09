@@ -32,7 +32,8 @@ public class Controller implements CS355Controller{
 		this.state.setSelectedTool(ToolType.DEFAULT);
 		this.state.setSelectedShape(-1);
 
-		this.state3D = new Controller3DState(SceneFacade.getCameraPosition(), SceneFacade.getCameraRotation(), 512.0, 512.0);
+		Point3D sceneCamPos = SceneFacade.getCameraPosition();
+		this.state3D = new Controller3DState(new Point3D(sceneCamPos.x, sceneCamPos.y, sceneCamPos.z), SceneFacade.getCameraRotation(), 512.0, 512.0);
 		this.state3D.setSelectedTool(ToolType.VIEW_3D);
 		
 		// set up graphic projection
@@ -498,13 +499,16 @@ public class Controller implements CS355Controller{
 
 		if(SceneFacade.open(file)){
 			Controller3DState state3D = (Controller3DState)this.state3D;
-			state3D.setCamPos(SceneFacade.getCameraPosition());
-			state3D.setCamRot(SceneFacade.getCameraRotation());
+			
+			Point3D sceneCamPos = SceneFacade.getCameraPosition();
+			
+			state3D.setCamPos(new Point3D(sceneCamPos.x, sceneCamPos.y, sceneCamPos.z));
+			state3D.resetCamRot(SceneFacade.getCameraRotation());
 			
 			// set modelview
 			this.graphicSetup.mode(MatrixMode.MODELVIEW);
 			this.graphicSetup.loadIdentityMatrix();
-			this.graphicSetup.rotate(state3D.getCamRot(), 0.0, 1.0, 0.0);
+			this.graphicSetup.rotate(Math.toRadians(state3D.getCamRot()), 0.0, 1.0, 0.0);
 			this.graphicSetup.translate(-state3D.getCamPos().x, -state3D.getCamPos().y, -state3D.getCamPos().z);
 			
 			GUIFunctions.refresh();
@@ -553,26 +557,26 @@ public class Controller implements CS355Controller{
 		    }
 		    else if(key == 87){
 		    	// Move Forward 87
-		    	state3D.getCamPos().z += 0.5 * Math.sin(Math.toRadians(state3D.getCamRot() + 90));
-		    	state3D.getCamPos().x += 0.5 * Math.cos(Math.toRadians(state3D.getCamRot() + 90));
-		    	state3D.getCamPos().z += 0.5 * Math.sin(Math.toRadians(0));
+		    	state3D.getCamPos().z -= 0.5 * Math.sin(Math.toRadians(state3D.getCamRot() + 90));
+		    	state3D.getCamPos().x -= 0.5 * Math.cos(Math.toRadians(state3D.getCamRot() + 90));
+		    	state3D.getCamPos().z -= 0.5 * Math.sin(Math.toRadians(0));
 		    	System.out.println("You are pressing W!");
 		    }
 		    else if(key == 83){
 		    	// Move Backward 83
-		    	state3D.getCamPos().z -= 0.5 * Math.sin(Math.toRadians(state3D.getCamRot() + 90));
-		    	state3D.getCamPos().x -= 0.5 * Math.cos(Math.toRadians(state3D.getCamRot() + 90));
-		    	state3D.getCamPos().z -= 0.5 * Math.sin(Math.toRadians(0));
+		    	state3D.getCamPos().z += 0.5 * Math.sin(Math.toRadians(state3D.getCamRot() + 90));
+		    	state3D.getCamPos().x += 0.5 * Math.cos(Math.toRadians(state3D.getCamRot() + 90));
+		    	state3D.getCamPos().z += 0.5 * Math.sin(Math.toRadians(0));
 		    	System.out.println("You are pressing S!");
 		    }
 		    else if(key == 81){
 		    	// Turn Left 81
-		    	state3D.setCamRot(Math.toRadians(-1.0));
+		    	state3D.setCamRot(Math.toRadians(70.0));
 		    	System.out.println("You are pressing Q!");
 		    }
 		    else if(key == 69){
 		    	// Turn Right 69
-		    	state3D.setCamRot(Math.toRadians(1.0));
+		    	state3D.setCamRot(Math.toRadians(-70.0));
 		    	System.out.println("You are pressing E!");
 		    }
 		    else if(key == 82){
@@ -587,8 +591,9 @@ public class Controller implements CS355Controller{
 		    }
 		    else if(key == 72){
 		    	// Return to the original home position and orientation 72
-		    	state3D.setCamPos(SceneFacade.getCameraPosition());
-		    	state3D.setCamRot(SceneFacade.getCameraRotation());
+		    	Point3D sceneCamPos = SceneFacade.getCameraPosition();
+				state3D.setCamPos(new Point3D(sceneCamPos.x, sceneCamPos.y, sceneCamPos.z));
+		    	state3D.resetCamRot(SceneFacade.getCameraRotation());
 		    	
 		    	System.out.println("You are pressing H!");
 		    }
@@ -597,7 +602,7 @@ public class Controller implements CS355Controller{
 		// update model view matrix
 		this.graphicSetup.mode(MatrixMode.MODELVIEW);
 		this.graphicSetup.loadIdentityMatrix();
-		this.graphicSetup.rotate(state3D.getCamRot(), 0.0, 1.0, 0.0);
+		this.graphicSetup.rotate(Math.toRadians(state3D.getCamRot()), 0.0, 1.0, 0.0);
 		this.graphicSetup.translate(-state3D.getCamPos().x, -state3D.getCamPos().y, -state3D.getCamPos().z);
 
 		GUIFunctions.refresh();
