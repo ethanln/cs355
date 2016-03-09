@@ -10,17 +10,21 @@ import java.util.Iterator;
 import cs355.GUIFunctions;
 import cs355.controller.state.*;
 import cs355.definitions.HandleType;
+import cs355.definitions.MatrixMode;
 import cs355.definitions.ToolType;
 import cs355.dto.*;
+import cs355.matrix.Graphics3D;
 import cs355.model.drawing.Shape;
 import cs355.model.facade.ModelFacade;
 import cs355.model.facade.SceneFacade;
+import cs355.model.scene.Point3D;
 import cs355.util.HandleUtil;
 
 public class Controller implements CS355Controller{
 
 	private ControllerState state;
-	private ControllerState state3D;
+	private Controller3DState state3D;
+	private Graphics3D graphicSetup;
 	
 	public Controller(){
 		this.state = new ControllerDefaultState();
@@ -30,6 +34,12 @@ public class Controller implements CS355Controller{
 
 		this.state3D = new Controller3DState(SceneFacade.getCameraPosition(), SceneFacade.getCameraRotation(), 512.0, 512.0);
 		this.state3D.setSelectedTool(ToolType.VIEW_3D);
+		
+		// set up graphic projection
+		this.graphicSetup = new Graphics3D();
+		this.graphicSetup.mode(MatrixMode.PROJECTION);
+		this.graphicSetup.loadIdentityMatrix();
+		this.graphicSetup.gluPerspective(45.0, this.state3D.getWidth()/this.state3D.getHeight(), 0.01f, 1000.0f);
 	}
 	
 	@Override
@@ -490,6 +500,13 @@ public class Controller implements CS355Controller{
 			Controller3DState state3D = (Controller3DState)this.state3D;
 			state3D.setCamPos(SceneFacade.getCameraPosition());
 			state3D.setCamRot(SceneFacade.getCameraRotation());
+			
+			// set modelview
+			this.graphicSetup.mode(MatrixMode.MODELVIEW);
+			this.graphicSetup.loadIdentityMatrix();
+			this.graphicSetup.rotate(state3D.getCamRot(), 0.0, 1.0, 0.0);
+			this.graphicSetup.translate(-state3D.getCamPos().x, -state3D.getCamPos().y, -state3D.getCamPos().z);
+			
 			GUIFunctions.refresh();
 		}
 	}
@@ -520,6 +537,7 @@ public class Controller implements CS355Controller{
 		
 		while(iterator.hasNext()){
 			key = iterator.next();
+			iterator.remove();
 
 		 	if(key == 65){
 		    	// Move Left 65  	
@@ -549,22 +567,22 @@ public class Controller implements CS355Controller{
 		    }
 		    else if(key == 81){
 		    	// Turn Left 81
-		    	state3D.setCamRot(-0.5);
+		    	state3D.setCamRot(Math.toRadians(-1.0));
 		    	System.out.println("You are pressing Q!");
 		    }
 		    else if(key == 69){
 		    	// Turn Right 69
-		    	state3D.setCamRot(0.5);
+		    	state3D.setCamRot(Math.toRadians(1.0));
 		    	System.out.println("You are pressing E!");
 		    }
 		    else if(key == 82){
 		    	// Move Up 82
-		    	state3D.setCamPosY(-0.5);
+		    	state3D.setCamPosY(0.5);
 		    	System.out.println("You are pressing R!");
 		    }
 		    else if(key == 70){
 		    	// Move Down 70
-		    	state3D.setCamPosY(0.5);
+		    	state3D.setCamPosY(-0.5);
 		    	System.out.println("You are pressing F!");
 		    }
 		    else if(key == 72){
@@ -576,6 +594,12 @@ public class Controller implements CS355Controller{
 		    }
 		}
 		
+		// update model view matrix
+		this.graphicSetup.mode(MatrixMode.MODELVIEW);
+		this.graphicSetup.loadIdentityMatrix();
+		this.graphicSetup.rotate(state3D.getCamRot(), 0.0, 1.0, 0.0);
+		this.graphicSetup.translate(-state3D.getCamPos().x, -state3D.getCamPos().y, -state3D.getCamPos().z);
+
 		GUIFunctions.refresh();
 	}
 
@@ -720,6 +744,18 @@ public class Controller implements CS355Controller{
 	public boolean is3D(){
 		Controller3DState state3D = (Controller3DState)this.state3D;
 		return state3D.isActive();
+	}
+	
+	public Graphics3D getGraphicsSetup(){
+		return this.graphicSetup;
+	}
+	
+	public Point3D getCamPos(){
+		return this.state3D.getCamPos();
+	}
+	
+	public double getCamRot(){
+		return this.state3D.getCamRot();
 	}
 	
 	private void resetSelection(){

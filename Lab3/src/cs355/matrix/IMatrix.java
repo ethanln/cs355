@@ -10,7 +10,11 @@ public interface IMatrix {
 	
 	void translate(double x, double y, double z);
 	
+	void gluPerspective(double fov, double aspect, double near, double far);
+	
 	int getSize();
 	
 	double[][] getMatrix();
+	
+	void setMatrix(double[][] matrix);
 }

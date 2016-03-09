@@ -1,8 +1,6 @@
 package cs355.controller.state;
-
 import java.awt.geom.Point2D.Double;
 
-import cs355.matrix.Matrix3D;
 import cs355.model.drawing.Shape;
 import cs355.model.scene.Point3D;
 
@@ -11,9 +9,6 @@ public class Controller3DState extends ControllerState{
 	private Point3D camPos;
 	private double camRot;
 	
-	private Matrix3D modelView;
-	private Matrix3D projection;
-	
 	private double width;
 	private double height;
 	
@@ -21,10 +16,7 @@ public class Controller3DState extends ControllerState{
 	
 	public Controller3DState(Point3D _camPos, double _camRot, double _width, double _height){
 		this.camPos = _camPos;
-		this.camRot = _camRot;
-		
-		this.modelView = new Matrix3D();
-		this.projection = new Matrix3D();
+		this.camRot = _camRot;	
 		
 		this.width = _width;
 		this.height = _height;
@@ -100,24 +92,6 @@ public class Controller3DState extends ControllerState{
 
 	public void setHeight(float height) {
 		this.height = height;
-	}
-	
-	// matrix setters and getters
-	
-	public Matrix3D getModelView() {
-		return modelView;
-	}
-
-	public void setModelView(Matrix3D modelView) {
-		this.modelView = modelView;
-	}
-
-	public Matrix3D getProjection() {
-		return projection;
-	}
-
-	public void setProjection(Matrix3D projection) {
-		this.projection = projection;
 	}
 
 	public boolean isActive() {
