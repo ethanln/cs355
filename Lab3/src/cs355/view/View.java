@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -24,6 +26,8 @@ import cs355.model.drawing.Line;
 import cs355.model.drawing.Shape;
 import cs355.model.facade.ModelFacade;
 import cs355.model.facade.SceneFacade;
+import cs355.model.image.CS355Image;
+import cs355.model.image.ImageModel;
 import cs355.model.scene.Instance;
 import cs355.model.scene.Line3D;
 import cs355.model.scene.Point3D;
@@ -41,6 +45,21 @@ public class View implements ViewRefresher, Observer{
 	
 	@Override
 	public void refreshView(Graphics2D g2d) {
+		//displayImage
+		CS355Image image = this.controller.getImage();
+		if(this.controller.isImageView()){
+			BufferedImage imgBf = image.getImage();
+			float x = 1024.0f - (image.getWidth() / 2.0f);
+			float y = 1024.0f - (image.getHeight() / 2.0f);
+			AffineTransform op = CoordinateConverterUtil.convertObjToScreen(
+					  new ConvertObjToScreenDto(new Point2D.Double(x, y), 
+							  					new Point2D.Double(this.controller.getScreenOrigin().x, 
+							  										this.controller.getScreenOrigin().y), 
+							  										0.0, this.controller.getFactor()));
+			g2d.drawImage(imgBf, op, null);
+		}
+		
+		
 		ArrayList<Shape> shapes = (ArrayList)ModelFacade.getShapes();
 		ArrayList<Shape> overlayShapes = new ArrayList<Shape>();
 		

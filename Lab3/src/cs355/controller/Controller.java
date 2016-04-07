@@ -17,6 +17,8 @@ import cs355.matrix.Graphics3D;
 import cs355.model.drawing.Shape;
 import cs355.model.facade.ModelFacade;
 import cs355.model.facade.SceneFacade;
+import cs355.model.image.CS355Image;
+import cs355.model.image.ImageModel;
 import cs355.model.scene.Point3D;
 import cs355.util.HandleUtil;
 
@@ -25,6 +27,9 @@ public class Controller implements CS355Controller{
 	private ControllerState state;
 	private Controller3DState state3D;
 	private Graphics3D graphicSetup;
+	private CS355Image image;
+	
+	private boolean isImageView;
 	
 	public Controller(){
 		this.state = new ControllerDefaultState();
@@ -32,6 +37,9 @@ public class Controller implements CS355Controller{
 		this.state.setSelectedTool(ToolType.DEFAULT);
 		this.state.setSelectedShape(-1);
 
+		this.image = new ImageModel();
+		this.isImageView = false;
+		
 		Point3D sceneCamPos = SceneFacade.getCameraPosition();
 		this.state3D = new Controller3DState(new Point3D(sceneCamPos.x, sceneCamPos.y, sceneCamPos.z), SceneFacade.getCameraRotation(), 512.0, 512.0);
 		this.state3D.setSelectedTool(ToolType.VIEW_3D);
@@ -610,20 +618,28 @@ public class Controller implements CS355Controller{
 
 	@Override
 	public void openImage(File file) {
-		// TODO Auto-generated method stub
-		
+		if(file != null){
+			image.open(file);
+			GUIFunctions.refresh();
+		}
 	}
 
 	@Override
 	public void saveImage(File file) {
-		// TODO Auto-generated method stub
-		
+		if(file != null){
+			image.save(file);
+		}
 	}
 
 	@Override
 	public void toggleBackgroundDisplay() {
-		// TODO Auto-generated method stub
-		
+		if(this.isImageView){
+			this.isImageView = false;
+		}
+		else{
+			this.isImageView = true;
+		}
+		GUIFunctions.refresh();
 	}
 
 	@Override
@@ -648,44 +664,59 @@ public class Controller implements CS355Controller{
 
 	@Override
 	public void doEdgeDetection() {
-		// TODO Auto-generated method stub
-		
+		if(this.isImageView){
+			this.image.edgeDetection();
+			GUIFunctions.refresh();
+		}
 	}
 
 	@Override
 	public void doSharpen() {
-		// TODO Auto-generated method stub
-		
+		if(this.isImageView){
+			this.image.sharpen();
+			GUIFunctions.refresh();
+		}
 	}
 
 	@Override
 	public void doMedianBlur() {
-		// TODO Auto-generated method stub
-		
+		if(this.isImageView){
+			this.image.medianBlur();
+			GUIFunctions.refresh();
+		}
 	}
 
 	@Override
 	public void doUniformBlur() {
-		// TODO Auto-generated method stub
-		
+		if(this.isImageView){
+			this.image.uniformBlur();
+			GUIFunctions.refresh();
+		}
 	}
 
 	@Override
 	public void doGrayscale() {
-		// TODO Auto-generated method stub
-		
+		if(this.isImageView){
+			this.image.grayscale();
+			GUIFunctions.refresh();
+		}
 	}
 
 	@Override
 	public void doChangeContrast(int contrastAmountNum) {
-		// TODO Auto-generated method stub
+		if(this.isImageView){
+			this.image.contrast(contrastAmountNum);
+			GUIFunctions.refresh();
+		}
 		
 	}
 
 	@Override
 	public void doChangeBrightness(int brightnessAmountNum) {
-		// TODO Auto-generated method stub
-		
+		if(this.isImageView){
+			this.image.brightness(brightnessAmountNum);
+			GUIFunctions.refresh();
+		}
 	}
 
 	@Override
@@ -769,6 +800,14 @@ public class Controller implements CS355Controller{
 			this.state.setSelectedShape(-1);
 			ModelFacade.commitChange();
 		}
+	}
+	
+	public CS355Image getImage(){
+		return this.image;
+	}
+	
+	public boolean isImageView(){
+		return this.isImageView;
 	}
 	
 
