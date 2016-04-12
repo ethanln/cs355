@@ -8,13 +8,19 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.TreeMap;
 
+import cs355.dto.HSBDto;
 import cs355.dto.RGBDto;
 
 public class ImageModel extends CS355Image{
 	
 	@Override
 	public BufferedImage getImage() {
-		BufferedImage image = new BufferedImage(super.getWidth(), super.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		
+		if(!(super.getWidth() > 0 && super.getHeight() > 0)){
+			return null;
+		}
+		
+		BufferedImage image = new BufferedImage(super.getWidth(), super.getHeight(), BufferedImage.TYPE_INT_RGB);
 		for(int i = 0; i < super.getHeight(); i++){
 			for(int j = 0; j < super.getWidth(); j++){
 				int[] data = null;
@@ -28,18 +34,88 @@ public class ImageModel extends CS355Image{
 
 	@Override
 	public void edgeDetection() {
-		// TODO Auto-generated method stub
+		BufferedImage image = new BufferedImage(super.getWidth(), super.getHeight(), BufferedImage.TYPE_INT_RGB);
+		for(int i = 0; i < super.getHeight(); i++){
+			for(int j = 0; j < super.getWidth(); j++){
+				Color color = getEdge(j, i);
+				image.setRGB(j, i, color.getRGB());
+			}
+		}
+		super.setPixels(image);
+	}
+	
+	private Color getEdge(int x, int y){
+		float[] sobelX = new float[]{-1.0f, 0.0f,  1.0f,
+									 -2.0f, 0.0f,  2.0f,
+									 -1.0f, 0.0f,  1.0f};
 		
+		float[] sobelY = new float[]{-1.0f, -2.0f, -1.0f,
+									  0.0f,  0.0f, 	0.0f,
+									  1.0f,  2.0f,  1.0f};
+		
+
+
+		ArrayList<HSBDto> hsbValues = new ArrayList<HSBDto>();
+
+		for(int i = y - 1; i < y + 2; i++){
+			for(int j = x - 1; j < x + 2; j++){
+				float[] rgb = getValue(j, i);
+
+				float[] hsb = null;
+				hsb = Color.RGBtoHSB((int)rgb[0], (int)rgb[1], (int)rgb[2], hsb);
+
+				HSBDto hsbdto = new HSBDto(hsb[0], hsb[1], hsb[2]);
+				hsbValues.add(hsbdto);
+			}
+		}
+		
+		//float Hx = 0.0f;
+		//float Sx = 0.0f;
+		float Bx = 0.0f;
+		
+		for(int i = 0; i < hsbValues.size(); i++){
+			//Hx += (hsbValues.get(i).H * sobelX[i]) / 8.0f;
+			//Sx += (hsbValues.get(i).S * sobelX[i]) / 8.0f;
+			Bx += (hsbValues.get(i).B * sobelX[i]) / 8.0f;
+		}
+		
+		//float Hy = 0.0f;
+		//float Sy = 0.0f;
+		float By = 0.0f;
+		
+		for(int i = 0; i < hsbValues.size(); i++){
+			//Hy += (hsbValues.get(i).H * sobelY[i]) / 8.0f;
+			//Sy += (hsbValues.get(i).S * sobelY[i]) / 8.0f;
+			By += (hsbValues.get(i).B * sobelY[i]) / 8.0f;
+		}
+		
+		//float H = (float)Math.sqrt((float)Math.pow(Hx, 2.0f) + (float)Math.pow(Hy, 2.0f));
+		//float S = (float)Math.sqrt((float)Math.pow(Sx, 2.0f) + (float)Math.pow(Sy, 2.0f));
+		float B = (float)Math.sqrt((float)Math.pow(Bx, 2.0f) + (float)Math.pow(By, 2.0f));
+		
+		//H = Math.min(H, 1.0f);
+		//H = Math.max(H, 0.0f);
+		
+		//S = Math.min(S, 1.0f);
+		//S = Math.max(S, 0.0f);
+		
+		B = Math.min(B, 1.0f);
+		B = Math.max(B, 0.0f);
+		return Color.getHSBColor(0.0f, 0.0f, B);
+		//Color color = new Color((int)B, (int)B, (int)B);
+		//return color;
 	}
 
 	@Override
 	public void sharpen() {
+		BufferedImage image = new BufferedImage(super.getWidth(), super.getHeight(), BufferedImage.TYPE_INT_RGB);
 		for(int i = 0; i < super.getHeight(); i++){
 			for(int j = 0; j < super.getWidth(); j++){
 				Color color = getSharpen(j, i);
-				super.setPixel(j, i, new int[]{color.getRed(), color.getGreen(), color.getBlue()});
+				image.setRGB(j, i, color.getRGB());
 			}
 		}
+		super.setPixels(image);
 	}
 	
 	private Color getSharpen(int x, int y){
@@ -81,12 +157,14 @@ public class ImageModel extends CS355Image{
 
 	@Override
 	public void medianBlur() {
+		BufferedImage image = new BufferedImage(super.getWidth(), super.getHeight(), BufferedImage.TYPE_INT_RGB);
 		for(int i = 0; i < super.getHeight(); i++){
 			for(int j = 0; j < super.getWidth(); j++){
 				Color color = getMedian(j, i);
-				super.setPixel(j, i, new int[]{color.getRed(), color.getGreen(), color.getBlue()});
+				image.setRGB(j, i, color.getRGB());
 			}
 		}
+		super.setPixels(image);
 	}
 	
 	private Color getMedian(int x, int y){
@@ -130,12 +208,14 @@ public class ImageModel extends CS355Image{
 
 	@Override
 	public void uniformBlur() {
+		BufferedImage image = new BufferedImage(super.getWidth(), super.getHeight(), BufferedImage.TYPE_INT_RGB);
 		for(int i = 0; i < super.getHeight(); i++){
 			for(int j = 0; j < super.getWidth(); j++){
 				Color color = getAverage(j, i);
-				super.setPixel(j, i, new int[]{color.getRed(), color.getGreen(), color.getBlue()});
+				image.setRGB(j, i, color.getRGB());
 			}
-		}	
+		}
+		super.setPixels(image);
 	}
 	
 	private Color getAverage(int x, int y){

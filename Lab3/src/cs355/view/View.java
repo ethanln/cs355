@@ -47,7 +47,7 @@ public class View implements ViewRefresher, Observer{
 	public void refreshView(Graphics2D g2d) {
 		//displayImage
 		CS355Image image = this.controller.getImage();
-		if(this.controller.isImageView()){
+		if(this.controller.isImageView() && image.getImage() != null){
 			BufferedImage imgBf = image.getImage();
 			float x = 1024.0f - (image.getWidth() / 2.0f);
 			float y = 1024.0f - (image.getHeight() / 2.0f);
